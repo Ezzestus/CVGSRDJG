@@ -1,0 +1,57 @@
+﻿@model IEnumerable<VideoGameStore.Models.Credit_Card>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.card_number)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.expiry_date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.is_expired)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.is_flagged)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.username)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.card_number)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.expiry_date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.is_expired)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.is_flagged)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.User.username)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.credit_card_id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.credit_card_id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.credit_card_id })
+        </td>
+    </tr>
+}
+
+</table>

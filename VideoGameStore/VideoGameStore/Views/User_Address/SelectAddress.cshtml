@@ -1,0 +1,18 @@
+﻿@model VideoGameStore.Models.User_Address
+
+@{
+    ViewBag.Title = "Select An Address";
+}
+
+<h2>Select An Address</h2>
+
+<div class="form-group">
+    @Html.LabelFor(model => model.Address.street_address, "Street Address", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.DropDownList("userAddress", null, htmlAttributes: new { @class = "form-control" })
+        @*@Html.ValidationMessageFor(model => model.user_address.user_address_id, "", new { @class = "text-danger" })*@
+        @*@Html.ActionLink("Choose Address", "Index", "Cart",
+        new { returnUrl = Request.Url.PathAndQuery },
+        new { @style = "margin-left: 1em", @class = "btn btn-primary navbar-btn" })*@
+    </div>
+</div>

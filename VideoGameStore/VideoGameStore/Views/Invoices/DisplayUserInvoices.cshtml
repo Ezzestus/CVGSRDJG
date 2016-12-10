@@ -1,0 +1,47 @@
+﻿@model IEnumerable<VideoGameStore.Models.Invoice>
+
+@{
+    ViewBag.Title = "DisplayUserInvoices";
+}
+
+<h2>@this.User.Identity.Name's Invoices</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            Invoice Number
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.invoice_date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ship_date)
+        </th>     
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.invoice_id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.invoice_date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ship_date)
+        </td>        
+        <td>
+            <p>@Html.ActionLink("Display Invoice", "DisplayUserInvoice", new { id = item.invoice_id })</p>  
+            @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+            {
+                <p>@Html.ActionLink("Details", "Details", new { id = item.invoice_id })</p>
+                <p>@Html.ActionLink("Edit", "Edit", new { id = item.invoice_id })</p>
+                <p>@Html.ActionLink("Delete", "Delete", new { id = item.invoice_id })</p>
+            }                                  
+        </td>
+    </tr>
+}
+
+</table>
+

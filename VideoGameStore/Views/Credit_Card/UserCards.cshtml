@@ -1,0 +1,37 @@
+﻿@model IEnumerable<VideoGameStore.Models.Credit_Card>
+
+@{
+    ViewBag.Title = "UserCards";
+}
+
+<h2>User Credit Cards</h2>
+
+<p>@Html.ActionLink("Add A New Credit Card", "CreateUserCreditCard", "Credit_Card", null, new { @class = "btn btn-success" })</p>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.card_number)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.expiry_date)
+        </th>        
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.card_number)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.expiry_date)
+        </td>        
+        <td>
+            <p>@Html.ActionLink("Edit", "Edit", new { id = item.credit_card_id })</p>             
+            <p>@Html.ActionLink("Delete", "Delete", new { id = item.credit_card_id })</p>
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,80 @@
+﻿@model VideoGameStore.Models.UserInvoiceViewModel
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Invoice</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.invoice.invoice_date)
+            @*Invoice Date*@
+        </dt>
+
+        <dd>
+            @Model.GetDate()
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.user.first_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.user.first_name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.user.last_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.user.last_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.credit_card.card_number)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.credit_card.card_number)
+        </dd>
+    </dl>
+</div>
+<h4>Items</h4>
+<table>
+    <thead>
+        <tr>
+            <th style="width:30%">
+                Name
+            </th>
+            <th style="width:30%">
+                Quantity
+            </th>
+            <th style="width:30%">
+                Price
+            </th>
+            <th style="width:30%">
+                Subtotal
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.items)
+        {
+            <tr>
+                <td>@item.Game.game_name</td>
+                <td>@item.quantity</td>
+                <td>@item.price.ToString("c")</td>
+                <td>@Model.CalculateSubtotal(item).ToString("c")</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3">Total</td>
+            <td>@Model.CalculateTotal().ToString("c")</td>
+        </tr>
+    </tfoot>
+</table>

@@ -1,0 +1,74 @@
+﻿@* Profiles Index.cshtml
+   Author: John Lambert 
+
+    Displays the user's profile information and provides links to other user information
+*@
+@model IEnumerable<VideoGameStore.Models.User>
+
+@{
+    ViewBag.Title = "Profile";
+}
+
+<h2>Profile</h2>
+
+<table class="table">
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.username) </td>
+            <td>@Html.DisplayFor(modelItem => item.username)</td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.first_name) </td>
+            <td>@Html.DisplayFor(modelItem => item.last_name)</td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.birthdate) </td>
+            <td>@Html.DisplayFor(modelItem => item.birthdate)</td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.date_joined ) </td>
+            <td>@Html.DisplayFor(modelItem => item.date_joined )</td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.email) </td>
+            <td>@Html.DisplayFor(modelItem => item.email)</td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.favorite_platform ) </td>
+            <td>@Html.DisplayFor(modelItem => item.favorite_platform )</td>
+        </tr>
+        <tr>
+            <td>@Html.DisplayNameFor(model => model.favorite_category) </td>
+            <td>@Html.DisplayFor(modelItem => item.favorite_category)</td>
+        </tr>
+        <tr>
+            <td>@Html.ActionLink("Friend List", "Index", "Friend_List", new { id = item.user_id }, null)</td>
+        </tr>
+        <tr>
+            <td>@Html.ActionLink("Wish List", "Index", "Wish_List", new { id = item.user_id }, null)</td>
+        </tr>        
+        if (this.User.Identity.Name == item.username)
+        {
+            <tr>
+                <td>@Html.ActionLink("Library", "Index", "User_Game", new { id = item.user_id }, null)</td>
+            </tr>
+            <tr>
+                <td>@Html.ActionLink("Edit Profile", "Edit", new { id = item.user_id })</td>
+            </tr>
+            <tr>
+                <td>@Html.ActionLink("My Credit Cards", "Index", "Credit_Card", null, null)</td>
+            </tr>
+            <tr>
+                <td>@Html.ActionLink("My Invoices", "DisplayUserInvoices", "Invoices", new { invoice_id = item.user_id
+               }, null)</td>
+            </tr>
+            <tr>
+                <td>@Html.ActionLink("My Addresses", "Index", "User_Address", null, null)</td>
+            </tr>
+        }
+        <tr>
+            <td>@Html.ActionLink("Back to Users", "Index", "Users")</td>
+        </tr>
+    }
+</table>

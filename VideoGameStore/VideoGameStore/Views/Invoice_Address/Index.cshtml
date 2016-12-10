@@ -1,0 +1,45 @@
+﻿@model IEnumerable<VideoGameStore.Models.Invoice_Address>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.is_billing_address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Address.street_address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Invoice.invoice_id)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.is_billing_address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Address.street_address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Invoice.invoice_id)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.invoice_address_id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.invoice_address_id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.invoice_address_id })
+        </td>
+    </tr>
+}
+
+</table>

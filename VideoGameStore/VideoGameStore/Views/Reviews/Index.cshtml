@@ -1,0 +1,86 @@
+﻿@model IEnumerable<VideoGameStore.Models.Review>
+
+@{
+    ViewBag.Title = "Reviews";
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.review_date)
+        </th>
+        @if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.is_approved)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.is_deleted)
+            </th>
+        }
+        <th>
+            @Html.DisplayNameFor(model => model.Game.game_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.review_content)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.username)
+        </th>
+        <th>
+
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.review_date)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.is_approved)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.is_deleted)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.Game.game_name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.review_content)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.username)
+                </td>
+                <td>
+                    @Html.ActionLink("Delete", "Delete", new { id = item.review_id }) |
+                    @Html.ActionLink("Edit", "Edit", new { id = item.review_id, isAdmin = true })
+                </td>
+
+            </tr>
+        }
+        else
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.review_date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Game.game_name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.review_content)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.username)
+                </td>
+            </tr>
+        }
+    }
+
+</table>

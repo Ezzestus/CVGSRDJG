@@ -1,0 +1,51 @@
+﻿@model IEnumerable<VideoGameStore.Models.Line_Item>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.quantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Game.game_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Invoice.invoice_id)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.quantity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Game.game_name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Invoice.invoice_id)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.line_item_id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.line_item_id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.line_item_id })
+        </td>
+    </tr>
+}
+
+</table>

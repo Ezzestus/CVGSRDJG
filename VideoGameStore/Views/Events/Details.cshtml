@@ -1,0 +1,90 @@
+﻿@model VideoGameStore.Models.Store_Event
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Store_Event</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.store_event_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.store_event_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.start_date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.start_date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.end_date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.end_date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.max_registrants)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.max_registrants)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.is_full)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.is_full)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.is_members_only)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.is_members_only)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.is_cancelled)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.is_cancelled)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Address.street_address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address.street_address)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.store_event_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

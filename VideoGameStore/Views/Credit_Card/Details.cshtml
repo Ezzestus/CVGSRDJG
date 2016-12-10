@@ -1,0 +1,58 @@
+﻿@model VideoGameStore.Models.Credit_Card
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Credit_Card</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.card_number)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.card_number)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.expiry_date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.expiry_date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.is_expired)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.is_expired)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.is_flagged)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.is_flagged)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.username)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.username)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.credit_card_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

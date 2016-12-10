@@ -1,0 +1,88 @@
+﻿@model IEnumerable<VideoGameStore.Models.Store_Event_User>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Registered Events</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Store_Event.store_event_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Store_Event.description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Store_Event.start_date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Store_Event.end_date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Store_Event.max_registrants)
+        </th>
+        @if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.Store_Event.is_full)
+            </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Store_Event.is_members_only)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Store_Event.is_cancelled)
+                </th>
+        }
+        <th>
+            @Html.DisplayNameFor(model => model.Store_Event.Address.street_address)
+        </th>
+        <th></th>
+    </tr>
+
+    @{  string[] user_events = ViewData["user_events"] as string[];
+        int counter = 0;
+
+        foreach (var item in Model)
+        {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Store_Event.store_event_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Store_Event.description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Store_Event.start_date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Store_Event.end_date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Store_Event.max_registrants)
+                    </td>
+
+                    @if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
+                    {
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Store_Event.is_full)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Store_Event.is_members_only)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Store_Event.is_cancelled)
+                        </td>
+                    }
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Store_Event.Address.street_address)
+                    </td>
+                    <td>
+                        <p><a class="btn btn-danger" href="@Url.Action("UnRegister", "Events", new { store_event_id = item.store_event_id})">Un-Register For Event</a></p>
+                        <p><a class="btn btn-primary" href="@Url.Action("Details", "Events", new { id = item.store_event_id })">Event Details</a></p>
+                    </td>
+                </tr>
+            }
+        }
+</table>

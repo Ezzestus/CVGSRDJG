@@ -1,0 +1,13 @@
+﻿@model VideoGameStore.Models.Cart
+
+<div class="navbar-right">
+    @Html.ActionLink("Checkout", "Index", "Cart",
+        new { returnUrl = Request.Url.PathAndQuery },
+        new { @style = "margin-left: 1em", @class = "btn btn-primary navbar-btn" })
+</div>
+
+<div class="navbar-text navbar-right">
+    <strong>Cart:</strong>
+    @Model.Items.Sum(i => i.Quantity) item(s),
+    @Model.CalculateTotal().ToString("c")
+</div>

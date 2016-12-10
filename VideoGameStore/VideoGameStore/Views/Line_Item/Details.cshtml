@@ -1,0 +1,50 @@
+﻿@model VideoGameStore.Models.Line_Item
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Line_Item</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.quantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.quantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Game.game_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Game.game_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Invoice.invoice_id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Invoice.invoice_id)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.line_item_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

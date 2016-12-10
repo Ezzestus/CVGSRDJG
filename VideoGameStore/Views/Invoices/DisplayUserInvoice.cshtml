@@ -1,0 +1,83 @@
+﻿@model VideoGameStore.Models.UserInvoiceViewModel
+
+@{
+    ViewBag.Title = "Invoice Details";
+}
+
+<h2>@this.User.Identity.Name's Invoice</h2>
+
+<div>
+    <h4>Invoice</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.invoice.invoice_date)           
+        </dt>
+
+        <dd>            
+            @Model.GetDate()
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.user.first_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.user.first_name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.user.last_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.user.last_name)
+        </dd>
+        <dt>
+            Address
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.address.street_address)<br />@Html.DisplayFor(model => model.address.city), @Html.DisplayFor(model => model.address.Province.province_code)<br />@Html.DisplayFor(model => model.address.postal_code)
+        </dd>
+    </dl>
+</div>
+<h4>Items</h4>
+<table>
+    <thead>
+        <tr>
+            <th style="width:30%">
+                Name
+            </th>
+            <th style="width:30%">
+                Quantity
+            </th>
+            <th style="width:30%">
+                Price
+            </th>
+            <th style="width:30%">
+                Subtotal
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.items)
+        {
+            <tr>
+                <td>@item.Game.game_name</td>
+                <td>@item.quantity</td>
+                <td>@item.price.ToString("c")</td>
+                <td>@Model.CalculateSubtotal(item).ToString("c")</td>
+            </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <td colspan="3">Total</td>
+            <td>@Model.CalculateTotal().ToString("c")</td>
+        </tr>
+    </tfoot>
+</table>
+<div>
+    @Html.ActionLink("Back to Invoices", "DisplayUserInvoices", "Invoices", null, null)
+</div>
+<div>
+    @Html.ActionLink("Back to Cart", "Checkout", "Cart", null, null)
+</div>

@@ -1,0 +1,51 @@
+﻿@*Friend_List Index.cshtml
+    Author: John Lambert
+
+    Displays a list of all the users a selected user is freinds with.
+*@
+@model IEnumerable<VideoGameStore.Models.Friend_List>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Friend List</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.is_family)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.date_added)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.username)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User1.username)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.is_family)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.date_added)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.User.username)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.User1.username)
+        </td>
+        <td>
+            @Html.ActionLink("Unfriend", "Delete", "Friend_List", new {uid = item.User1.user_id, fid = item.User.user_id}, null)
+        </td>
+    </tr>
+}
+</table>
+<p>@Html.ActionLink("Back to profile", "Index", "Profiles", new { id = ViewBag.return_id }, null)</p>

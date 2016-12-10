@@ -1,0 +1,85 @@
+﻿@model VideoGameStore.Models.Review
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Game.game_name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Game.description)
+                </th>
+                <th>
+                    Date Purchased
+                </th>
+                <th>
+                    Rating
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Game.game_name)
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <img src="~/images/covers/@Html.DisplayFor(model =>model.Game.image_location)" style="height:200px; width:200px;" />
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Game.description)
+                </td>
+                <td>
+                    @ViewBag.datePurchased
+                </td>
+                <td>
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Rating</label>
+                        <div class="col-md-10">
+                            @ViewBag.rating
+                        </div>
+
+                    </div>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Game.game_name)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", "Games", new { id = Model.game_id }, null) |
+                    @Html.ActionLink("Back to List", "Index")
+                    <div class="text-centre">
+
+                        <a class="btn btn-primary" href="@Url.Action("Edit", "User_Game", new { id = ViewBag.userGameID })">Rate Game</a>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5">
+                    <h2>Review</h2>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5">
+                    @Html.TextAreaFor(model => model.review_content, htmlAttributes: new {@class = "reveiw-field"})
+                    <div class="col-md-10">
+                        <input type="submit" value="Save" class="btn btn-default" />
+                    </div>
+                </td>
+            </tr>
+
+        </table>
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.review_id)
+        @Html.HiddenFor(model => model.user_id)
+        @Html.HiddenFor(model => model.game_id)
+        @Html.HiddenFor(model => model.review_date)
+        @Html.HiddenFor(model => model.is_approved)
+        @Html.HiddenFor(model => model.is_deleted)
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,50 @@
+﻿@model VideoGameStore.Models.Friend_List
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Friend_List</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.is_family)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.is_family)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.date_added)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.date_added)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.username)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.username)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User1.username)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User1.username)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index", new { id = Model.user_id })
+</p>

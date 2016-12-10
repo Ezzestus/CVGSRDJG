@@ -1,0 +1,169 @@
+@model IEnumerable<VideoGameStore.Models.Game>
+
+@{
+    ViewBag.Title = "Games";
+}
+
+<h2>Index</h2>
+
+@if (this.User.IsInRole("Admin"))
+{
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+}
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.image_location)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.game_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.description)
+        </th>
+
+        @if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.cost)
+            </th>
+        }
+
+        <th>
+            @Html.DisplayNameFor(model => model.list_price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.on_hand)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.release_date)
+        </th>
+        @if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.is_on_sale)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.is_discontinued)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.is_downloadable)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.is_physical_copy)
+            </th>
+        }
+
+        <th>
+            @Html.DisplayNameFor(model => model.Developer.developer_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Genre.genre_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Publisher.publisher_name)
+        </th>
+        <th>Average Rating</th>
+        <th></th>
+        <th></th>
+    </tr>
+    @{int counter = 0;
+            string[] data = ViewData["AverageRatings"] as string[];
+        }
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <img src="~/images/covers/@Html.DisplayFor(modelItem => item.image_location)" style="height:200px; width:200px;" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.game_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.description)
+            </td>
+
+            @if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.cost)
+                </td>
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.list_price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.on_hand)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.release_date)
+            </td>
+
+            @if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.is_on_sale)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.is_discontinued)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.is_downloadable)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.is_physical_copy)
+                </td>
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.Developer.developer_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Genre.genre_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Publisher.publisher_name)
+            </td>
+       
+            @if (counter + 1 <= data.Length)
+            {
+                <td>
+                    @data[counter] / 5
+                </td>
+                counter++;
+            }
+            else if (counter + 1 >= data.Length || data[counter] == "N/A")
+            {
+                <td>
+                    N/A
+                </td>
+            }
+                              
+            <td>
+                @if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
+                {
+                    <p>@Html.ActionLink("Edit", "Edit", new { id = item.game_id }) </p>
+                }
+
+                <p>@Html.ActionLink("Details", "Details", new { id = item.game_id })</p>
+                <p><a href="@Url.Action("Index","Reviews", new { id = item.game_id })">Reviews</a></p>
+
+                @if (this.User.IsInRole("Admin"))
+                {
+                    <p>@Html.ActionLink("Delete", "Delete", new { id = item.game_id })</p>
+                }
+            </td>
+            <td>
+                @using (Html.BeginForm("AddToCart", "Cart"))
+                {
+                    <div class="pull-right">
+                        @Html.Hidden("game_id", item.game_id)
+                        @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+                        <input type="submit" class="btn btn-primary" value="Add to Cart" />
+                    </div>
+                }
+            </td>
+        </tr>
+    }
+</table>

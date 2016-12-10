@@ -1,0 +1,42 @@
+﻿@model VideoGameStore.Models.User_Address
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>User_Address</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.address_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.address_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Address.street_address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address.street_address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.username)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.username)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

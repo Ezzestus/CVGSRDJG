@@ -1,0 +1,49 @@
+﻿@model IEnumerable<VideoGameStore.Models.Wish_List>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.date_added)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Game.game_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.username)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.date_added)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Game.game_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.username)
+            </td>
+            @if (item.User.username == this.User.Identity.Name)
+            {
+                <td>
+                    @Html.ActionLink("Delete", "Delete", new { id = item.wish_list_id })
+                </td>
+            }
+
+        </tr>
+    }
+
+</table>
+<p>@Html.ActionLink("Back to Profile", "Index", "Profiles", new { id = ViewBag.return_id }, null)</p>

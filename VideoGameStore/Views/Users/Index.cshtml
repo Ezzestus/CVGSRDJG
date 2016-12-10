@@ -1,0 +1,205 @@
+﻿@model IEnumerable<VideoGameStore.Models.User>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+@if (this.User.IsInRole("Admin"))
+{
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.username)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.email)
+        </th>
+        @if (this.User.IsInRole("Admin"))
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.user_password)
+            </th>
+        }
+
+        @if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.login_failures)
+            </th>
+        }
+
+        <th>
+            @Html.DisplayNameFor(model => model.first_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.last_name)
+        </th>
+
+        @if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.gender)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.birthdate)
+            </th>
+        }
+
+        @if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.date_joined)
+            </th>
+        }
+
+        @if (this.User.IsInRole("Admin"))
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.is_employee)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.is_admin)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.is_member)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.is_inactive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.is_locked_out)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.is_on_email_list)
+            </th>
+        }
+
+        <th>
+            @Html.DisplayNameFor(model => model.favorite_platform)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.favorite_category)
+        </th>
+
+        @if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
+        {
+            <th>
+                @Html.DisplayNameFor(model => model.notes)
+            </th>
+        }
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.email)
+            </td>
+
+            @if (this.User.IsInRole("Admin"))
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.user_password)
+                </td>
+            }
+
+            @if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.login_failures)
+                </td>
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.first_name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.last_name)
+            </td>
+
+            @if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.gender)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.birthdate)
+                </td>
+            }
+
+            @if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.date_joined)
+                </td>
+            }
+
+            @if (this.User.IsInRole("Admin"))
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.is_employee)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.is_admin)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.is_member)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.is_inactive)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.is_locked_out)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.is_on_email_list)
+                </td>
+            }
+
+            <td>
+                @Html.DisplayFor(modelItem => item.favorite_platform)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.favorite_category)
+            </td>
+            @if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.notes)
+                </td>
+            }
+
+            <td>
+                @if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
+                {
+                    <p>@Html.ActionLink("Edit", "Edit", new { id = item.user_id })</p>
+                }
+
+                @Html.ActionLink("Details", "Details", new { id = item.user_id })
+
+                @if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
+                {
+                    <p>@Html.ActionLink("Delete", "Delete", new { id = item.user_id })</p>
+                }
+                <p>@Html.ActionLink("Profile", "Index", "Profiles", new { id = item.user_id }, null)</p>
+            </td>
+        </tr>
+    }
+
+</table>

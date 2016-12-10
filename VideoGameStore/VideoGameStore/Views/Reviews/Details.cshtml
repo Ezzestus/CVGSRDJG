@@ -1,0 +1,58 @@
+﻿@model VideoGameStore.Models.Review
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Review</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.review_date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.review_date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.is_approved)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.is_approved)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.is_deleted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.is_deleted)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Game.game_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Game.game_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.User.username)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.username)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.review_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

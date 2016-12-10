@@ -1,0 +1,84 @@
+﻿@model VideoGameStore.Models.User_Game
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Game.game_name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Game.description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.date_purchased)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.rating)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Game.game_name)
+                </th>
+            </tr>
+            <tr>
+                <td>
+                    <img src="~/images/covers/@Html.DisplayFor(model =>model.Game.image_location)" style="height:200px; width:200px;" />
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Game.description)
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.date_purchased)
+                </td>
+                <td>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.rating, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("rating", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.rating, "", new { @class = "text-danger" })
+                        </div>
+                        <div class="col-md-10">
+                            <input type="submit" value="Save" class="btn btn-default" />
+                        </div>
+                        </div>
+                </td>
+                <td>
+                    @Html.DisplayFor(model => model.Game.game_name)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "Details", "Games", new { id = Model.game_id }, null) |
+                    @Html.ActionLink("Back to List", "Index")
+                    @if (ViewBag.reviewID == null || ViewBag.reviewID == 0)
+                        {
+                            <div class="text-centre">
+                                <a class="btn btn-primary" href="@Url.Action("Create", "Reviews")">Review Game</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="text-centre">
+                                <a class="btn btn-primary" href="@Url.Action("Edit", "Reviews", new { id = ViewBag.reviewID, userGameID = Model.user_game_id })">Review Game</a>
+                            </div>
+                        }
+                </td>
+            </tr>
+
+        </table>
+
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.user_game_id)
+        @Html.HiddenFor(model => model.user_id)
+        @Html.HiddenFor(model => model.game_id)
+        @Html.HiddenFor(model => model.date_purchased)
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
