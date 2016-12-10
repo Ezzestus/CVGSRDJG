@@ -1,4 +1,11 @@
-﻿using MySql.Data.MySqlClient;
+﻿/* Filename: GamesController.cs
+ * Description: This class is responsible for handing the interaction between the user and the Game model.
+ * 
+ * Revision History:
+ *     Ryan Pease, 2016-10-23: Created 
+*/
+
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -16,8 +23,8 @@ namespace VideoGameStore.Controllers
     {
         private VideoGameStoreDBContext db = new VideoGameStoreDBContext();
 
-        [AllowAnonymous]
         // GET: Games
+        [AllowAnonymous]
         public ActionResult Index()
         {
             var games = db.Games.Include(g => g.Developer).Include(g => g.Genre).Include(g => g.Publisher);
@@ -26,8 +33,8 @@ namespace VideoGameStore.Controllers
             return View(games.ToList());
         }
 
-        [AllowAnonymous]
         // GET: Games/Details/5
+        [AllowAnonymous]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -42,8 +49,8 @@ namespace VideoGameStore.Controllers
             return View(game);
         }
 
-        [Authorize(Roles = "Admin")]
         // GET: Games/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             ViewBag.developer_id = new SelectList(db.Developers, "developer_id", "developer_name");
@@ -51,11 +58,11 @@ namespace VideoGameStore.Controllers
             ViewBag.publisher_id = new SelectList(db.Publishers, "publisher_id", "publisher_name");
             return View();
         }
-
-        [Authorize(Roles = "Admin")]
+        
         // POST: Games/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "game_id,game_name,description,cost,list_price,on_hand,developer_id,publisher_id,genre_id,release_date,is_on_sale,is_discontinued,is_downloadable,is_physical_copy,image_location")] Game game)
@@ -73,8 +80,8 @@ namespace VideoGameStore.Controllers
             return View(game);
         }
 
-        [Authorize(Roles = "Admin, Employee")]
         // GET: Games/Edit/5
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -92,10 +99,10 @@ namespace VideoGameStore.Controllers
             return View(game);
         }
 
-        [Authorize(Roles = "Admin, Employee")]
         // POST: Games/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "game_id,game_name,description,cost,list_price,on_hand,developer_id,publisher_id,genre_id,release_date,is_on_sale,is_discontinued,is_downloadable,is_physical_copy,image_location")] Game game)
@@ -112,8 +119,8 @@ namespace VideoGameStore.Controllers
             return View(game);
         }
 
-        [Authorize(Roles = "Admin")]
         // GET: Games/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -127,9 +134,9 @@ namespace VideoGameStore.Controllers
             }
             return View(game);
         }
-
-        [Authorize(Roles = "Admin")]
+        
         // POST: Games/Delete/5
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -246,8 +253,7 @@ namespace VideoGameStore.Controllers
                 {
                     using (SharedDB.connection)
                     {
-                        SharedDB.connection.Open();
-                        //Maybe break it into two queries.
+                        SharedDB.connection.Open();                        
                         SharedDB.command = new MySqlCommand("SELECT rating FROM User_Game WHERE rating IS NOT NULL AND game_id = " + id, SharedDB.connection);
                         MySqlDataReader reader = SharedDB.command.ExecuteReader();
                         if (reader.HasRows)
@@ -268,14 +274,10 @@ namespace VideoGameStore.Controllers
                             }
 
                             num_of_ratings = counter;
-
                             averageRating = Math.Round((double)sum_of_ratings / (double)num_of_ratings, 1);
-
                             ratingResults[idCounter] = averageRating.ToString();
-
                             reader.Close();
                         }
-
                         else
                         {
                             ratingResults[idCounter] = "N/A";
@@ -284,9 +286,7 @@ namespace VideoGameStore.Controllers
                 }
                 idCounter++;
             }
-
             ViewData["AverageRatings"] = sanitizeArray(ratingResults);
         }
-
     }
 }

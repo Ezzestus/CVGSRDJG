@@ -10,6 +10,7 @@ using VideoGameStore.Models;
 
 namespace VideoGameStore.Controllers
 {
+    [Authorize(Roles = "Admin, Employee")]
     public class Sales_ReportController : Controller
     {
         private VideoGameStoreDBContext db = new VideoGameStoreDBContext();

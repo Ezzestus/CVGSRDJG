@@ -3,8 +3,8 @@
  * 
  * Revision History:
  *     Ryan Pease, 2016-10-29: Created
- *     Ryan Pease, 2016-10-31: Created
-
+ *     Ryan Pease, 2016-10-31: Updated
+ *     Ryan Pease, 2016-12-08: Updated
 */
 
 using System;
@@ -26,7 +26,6 @@ namespace VideoGameStore.Models
         [Required]
         [Display(Name = "Credit Card ID")]
         public int credit_card_id { get; set; }
-        [Required]
         [Display(Name = "Invoice Date")]
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         [DateNotInFuture]
@@ -39,8 +38,15 @@ namespace VideoGameStore.Models
     }
 
     [MetadataType(typeof(InvoiceMetadata))]
-    public partial class Invoice
+    public partial class Invoice : IValidatableObject
     {
-
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            if (invoice_date == DateTime.Parse("0001-01-01"))
+            {
+                invoice_date = DateTime.Now;
+            }
+            yield return ValidationResult.Success;
+        }
     }
 }

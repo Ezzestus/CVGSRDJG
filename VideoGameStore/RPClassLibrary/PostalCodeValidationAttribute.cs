@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* Filename: PostalCodeValidationAttribute.cs
+ * Description: The purpose of this class is to provide validation conditions for postal codes.
+ * 
+ * Revision History:
+ *     Ryan Pease, 2016-10-30: Created
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;

@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* Filename: User_AddressController.cs
+ * Description: This class is responsible for handing the interaction between the user and the User Address model.
+ * 
+ * Revision History:
+ *     Ryan Pease, 2016-10-23: Created 
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -22,8 +29,8 @@ namespace VideoGameStore.Controllers
             return View(user_Address.ToList());
         }
 
-        [Authorize(Roles = "Admin, Employee")]
         // GET: User_Address/Create
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult Create()
         {
             ViewBag.address_id = new SelectList(db.Addresses, "address_id", "street_address");
@@ -31,10 +38,10 @@ namespace VideoGameStore.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin, Employee")]
         // POST: User_Address/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "user_id,address_id,address_name")] User_Address user_Address)
@@ -51,8 +58,8 @@ namespace VideoGameStore.Controllers
             return View(user_Address);
         }
 
-        [Authorize(Roles = "Admin, Employee")]
         // GET: User_Address/Edit/5
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -69,10 +76,10 @@ namespace VideoGameStore.Controllers
             return View(user_Address);
         }
 
-        [Authorize(Roles = "Admin, Employee")]
         // POST: User_Address/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "user_id,address_id,address_name")] User_Address user_Address)
@@ -88,8 +95,8 @@ namespace VideoGameStore.Controllers
             return View(user_Address);
         }
 
-        [Authorize(Roles = "Admin, Employee")]
         // GET: User_Address/Delete/5
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -104,8 +111,8 @@ namespace VideoGameStore.Controllers
             return View(user_Address);
         }
 
-        [Authorize(Roles = "Admin, Employee")]
         // POST: User_Address/Delete/5
+        [Authorize(Roles = "Admin, Employee")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

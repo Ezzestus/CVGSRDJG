@@ -22,18 +22,23 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Home", "Index", "User_Game")</li>
-                    @*<li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
                     <li>@Html.ActionLink("Users", "Index", "Users")</li>
                     @*<li>@Html.ActionLink("Customers", "Customers", "Users")</li>
                     <li>@Html.ActionLink("Employees", "Employees", "Users")</li>
                     <li>@Html.ActionLink("Members", "Members", "Users")</li>*@
                     <li>@Html.ActionLink("Games", "Index", "Games")</li>
-                    <li>@Html.ActionLink("Events", "Index", "Events")</li>
-                    <li>@Html.ActionLink("Reports", "Index", "Reports")</li>
-                    <li>@Html.ActionLink("My Profile", "MyIndex", "Profiles", new { uname = this.User.Identity.Name }, null)</li> 
-                    @if(User.Identity.IsAuthenticated)
+                    @if (User.Identity.IsAuthenticated)
                     {
+                        <li>@Html.ActionLink("Events", "Index", "Events")</li>
+                    }                    
+                    
+                    @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                    {
+                        <li>@Html.ActionLink("Reports", "Index", "Reports")</li>
+                    }                    
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("My Profile", "MyIndex", "Profiles", new { uname = this.User.Identity.Name }, null)</li>
                         <li>@Html.ActionLink("Library", "Index", "User_Game")</li>
                     }
                 </ul>
@@ -57,9 +62,7 @@
                                 <a href="@Url.Action("Register", "Auth")">Register</a>
                             </li>
                         }                                   
-                </ul>                
-                
-                @*@Html.Partial("_LoginPartial")*@
+                </ul>                                
             </div>                             
         </div>
     </div>

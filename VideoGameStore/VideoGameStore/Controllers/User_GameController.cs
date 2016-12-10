@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* Filename: User_GameController.cs
+ * Description: This class is responsible for handing the interaction between the user and the User Game model.
+ * 
+ * Revision History:
+ *     Ryan Pease, 2016-10-23: Created 
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -67,21 +74,6 @@ namespace VideoGameStore.Controllers
 
             return View(gamesQueryList);
         }
-
-        // GET: User_Game/Details/5
-        //public ActionResult Details(int? id)
-        //{
-        //    if (id == null)
-        //    {
-        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-        //    }
-        //    User_Game user_Game = db.User_Game.Find(id);
-        //    if (user_Game == null)
-        //    {
-        //        return HttpNotFound();
-        //    }
-        //    return View(user_Game);
-        //}
 
         // GET: User_Game/Create
         public ActionResult Create()

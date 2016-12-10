@@ -24,7 +24,7 @@ namespace RPClassLibrary
         /// <returns></returns>
         public static string Capitalize(string value, bool titleCase)
         {
-            string newValue = "";                               // how to account for first names/last names with hyphen? should capitalize word after hyphen in name, but not in title
+            string newValue = "";                               
             if (value == null)
             {
                 value = "";
@@ -43,6 +43,10 @@ namespace RPClassLibrary
                             if (i == 0)
                             {
                                 newValue += Char.ToString(values[0]).ToUpper();
+                                if (i == values.Length - 1)
+                                {
+                                    newValue += " ";
+                                }
                             }
                             else
                             {

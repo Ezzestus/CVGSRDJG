@@ -5,8 +5,9 @@
  * Controller that handles all of the CRUD operations for the events. Also implements a registering and unregistering service. 
  * 
  * Revision History:
- * 3/12/2016, Greg Shalay: Created
- * 3-4/12/2016, Greg Shalay: Created Code
+ * 23/10/2016, Ryan Pease: Created
+ * 03/12/2016, Greg Shalay: Created Code
+ * 04/12/2016, Greg Shalay: Created Code
  */
 
 using MySql.Data.MySqlClient;
@@ -81,6 +82,7 @@ namespace VideoGameStore.Controllers
         }
 
         // GET: Events/Create
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult Create()
         {
             ViewBag.address_id = new SelectList(db.Addresses, "address_id", "street_address");
@@ -90,6 +92,7 @@ namespace VideoGameStore.Controllers
         // POST: Events/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "store_event_id,store_event_name,description,address_id,start_date,end_date,max_registrants,is_full,is_members_only,is_cancelled")] Store_Event store_Event)
@@ -106,6 +109,7 @@ namespace VideoGameStore.Controllers
         }
 
         // GET: Events/Edit/5
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -124,6 +128,7 @@ namespace VideoGameStore.Controllers
         // POST: Events/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "store_event_id,store_event_name,description,address_id,start_date,end_date,max_registrants,is_full,is_members_only,is_cancelled")] Store_Event store_Event)
@@ -139,6 +144,7 @@ namespace VideoGameStore.Controllers
         }
 
         // GET: Events/Delete/5
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -154,6 +160,7 @@ namespace VideoGameStore.Controllers
         }
 
         // POST: Events/Delete/5
+        [Authorize(Roles = "Admin, Employee")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
@@ -173,12 +180,8 @@ namespace VideoGameStore.Controllers
         public ActionResult UnRegister(int store_event_id)
         {
             int user_id = db.Users.Where(u => u.username == this.User.Identity.Name).FirstOrDefault().user_id;
-
             SharedDB.setConnectionString();
-
             SharedDB.command = new MySqlCommand("SELECT store_event_id FROM ", SharedDB.connection);
-
-
             SharedDB.command = new MySqlCommand("DELETE FROM Store_Event_User WHERE store_event_id = " + store_event_id + " AND user_id = " + 
                 user_id, SharedDB.connection);
             SharedDB.connection.Open();
@@ -186,7 +189,6 @@ namespace VideoGameStore.Controllers
             {
                 SharedDB.command.ExecuteNonQuery();
             }
-
             return RedirectToAction("Index");
         }
 
