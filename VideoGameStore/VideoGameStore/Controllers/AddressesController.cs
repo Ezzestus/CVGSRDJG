@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* Filename: AddressesController.cs
+ * Description: This class is responsible for handing the interaction between the user and the Address model.
+ * 
+ * Revision History:
+ *     Ryan Pease, 2016-10-23: Created 
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -61,18 +68,19 @@ namespace VideoGameStore.Controllers
             return View(address);
         }
 
+        // This action is responsible for creating a user address
         // GET: Addresses/CreateUserAddress
         public ActionResult CreateUserAddress()
         {
-            //ViewBag.user_id = db.Users.Where(u => u.username == this.User.Identity.Name).FirstOrDefault().user_id;
             ViewBag.province_id = new SelectList(db.Provinces, "province_id", "province_code");
             return View();
         }
 
-        [Authorize(Roles ="Customer, Admin, Employee")]
+        // This action is responsible for creating a user address
         // POST: Addresses/CreateUserAddress
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Customer, Admin, Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateUserAddress([Bind(Include = "address_id,street_address,city,province_id,postal_code")] Address address)
@@ -82,7 +90,6 @@ namespace VideoGameStore.Controllers
             {
                 db.Addresses.Add(address);
                 db.SaveChanges();
-
                 User_Address userAddress = new User_Address();
                 int address_id = db.Addresses.Max(a => a.address_id);
                 userAddress.user_id = user_id;

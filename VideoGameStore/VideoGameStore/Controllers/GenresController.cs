@@ -1,4 +1,12 @@
-﻿using System;
+﻿/* Filename: GenresController.cs
+ * Description: This class is responsible for handing the interaction between the user and the Genre model.
+ * 
+ * Revision History:
+ *     Ryan Pease, 2016-10-23: Created 
+ *     Ryan Pease, 2016-12-09: Updated
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -10,6 +18,7 @@ using VideoGameStore.Models;
 
 namespace VideoGameStore.Controllers
 {
+    [Authorize(Roles = "Admin, Employee")]
     public class GenresController : Controller
     {
         private VideoGameStoreDBContext db = new VideoGameStoreDBContext();

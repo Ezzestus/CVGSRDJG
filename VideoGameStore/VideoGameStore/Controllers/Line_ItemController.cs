@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* Filename: Line_ItemController.cs
+ * Description: This class is responsible for handing the interaction between the user and the Line Item model.
+ * 
+ * Revision History:
+ *     Ryan Pease, 2016-10-23: Created 
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -10,6 +17,7 @@ using VideoGameStore.Models;
 
 namespace VideoGameStore.Controllers
 {
+    [Authorize(Roles = "Admin, Employee")]
     public class Line_ItemController : Controller
     {
         private VideoGameStoreDBContext db = new VideoGameStoreDBContext();

@@ -6,7 +6,7 @@
 
 <h2>Index</h2>
 
-@if (this.User.IsInRole("Admin"))
+@if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
 {
     <p>
         @Html.ActionLink("Create New", "Create")

@@ -1,6 +1,8 @@
 ﻿/* Filename: Cart.cs
  * Description: This class is responsible for the characteristics and behaviour of the Cart.
  * 
+ * Note: Some of this code was adapted from example code found in Chapter 9 of "Pro ASP.NET MVC 5" by Adam Freeman.
+ * 
  * Revision History:
  *     Ryan Pease, 2016-11-29: Created 
 */

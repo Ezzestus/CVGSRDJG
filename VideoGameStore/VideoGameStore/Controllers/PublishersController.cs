@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* Filename: PublishersController.cs
+ * Description: This class is responsible for handing the interaction between the user and the Publisher model.
+ * 
+ * Revision History:
+ *     Ryan Pease, 2016-10-23: Created 
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -10,6 +17,7 @@ using VideoGameStore.Models;
 
 namespace VideoGameStore.Controllers
 {
+    [Authorize(Roles = "Admin, Employee")]
     public class PublishersController : Controller
     {
         private VideoGameStoreDBContext db = new VideoGameStoreDBContext();

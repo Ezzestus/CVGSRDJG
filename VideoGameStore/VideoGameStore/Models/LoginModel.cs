@@ -1,4 +1,14 @@
-﻿using System;
+﻿/* Filename: LoginModel.cs
+ * Description: This class is responsible for the characteristics for the user login model.
+ * 
+ * Note: Some of the code is based on the tutorial found at the link below:
+ * http://kristianguevara.net/creating-your-asp-net-mvc-5-application-from-scratch-for-beginners-using-entity-framework-6-and-identity-with-crud-functionalities/ 
+ *
+ * Revision History:
+ *     Ryan Pease, 2016-11-29: Created 
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;

@@ -1,5 +1,8 @@
-﻿/* Filename: CartController.cs
+﻿/* Filename: AuthController.cs
  * Description: This class is responsible for handing the user authorization and authentication.
+ * 
+ * Note: Some of the code is based on the tutorial found at the link below:
+ * http://kristianguevara.net/creating-your-asp-net-mvc-5-application-from-scratch-for-beginners-using-entity-framework-6-and-identity-with-crud-functionalities/
  * 
  * Revision History:
  *     Ryan Pease, 2016-11-22: Created 
@@ -20,6 +23,7 @@ namespace VideoGameStore.Controllers
     [AllowAnonymous]
     public class AuthController : Controller
     {
+        // This action is responsible for displaying the login view.
         // GET: Auth
         [HttpGet]
         public ActionResult Login()
@@ -27,6 +31,7 @@ namespace VideoGameStore.Controllers
             return View();
         }
 
+        // This action is responsible for when a user attempts to log into the system.
         [HttpPost]
         public ActionResult Login(LoginModel model)
         {
@@ -63,12 +68,10 @@ namespace VideoGameStore.Controllers
                             new Claim(ClaimTypes.Email, user.email),
                             new Claim(ClaimTypes.Role, role)
                             },
-                            "ApplicationCookie");
+                            "ApplicationCookie");                    
                         var context = Request.GetOwinContext();
                         var authManager = context.Authentication;
-
                         authManager.SignIn(identity);
-
                         return RedirectToAction("Index", "Home");
                     }
                     ModelState.AddModelError("", "Incorrect password.");
@@ -80,7 +83,6 @@ namespace VideoGameStore.Controllers
                     return View(model);
                 }
             }
-
             else
             {
                 ModelState.AddModelError("", "Invalid email or password.");
@@ -88,6 +90,7 @@ namespace VideoGameStore.Controllers
             }
         }
 
+        // This action is responsible for when a user logs out of the system.
         public ActionResult Logout()
         {
             var context = Request.GetOwinContext();
@@ -97,11 +100,13 @@ namespace VideoGameStore.Controllers
             return RedirectToAction("Login", "Auth");
         }
 
+        // This action is responsible displaying the register view.
         public ActionResult Register()
         {
             return View();
         }
 
+        // This action is responsible for when a user registers.
         [HttpPost]
         public ActionResult Register(User user)
         {
@@ -124,6 +129,7 @@ namespace VideoGameStore.Controllers
             }
         }
 
+        // This method is responsible for checking if the entered password matches the stored password.
         public bool CheckPassword(string plainTextPassword, string hashedPassword)
         {
             VideoGameStoreDBContext db = new VideoGameStoreDBContext();

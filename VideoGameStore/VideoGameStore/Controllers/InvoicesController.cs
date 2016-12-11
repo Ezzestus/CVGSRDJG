@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* Filename: InvoicesController.cs
+ * Description: This class is responsible for handing the interaction between the user and the Invoice model.
+ * 
+ * Revision History:
+ *     Ryan Pease, 2016-10-23: Created 
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -14,14 +21,15 @@ namespace VideoGameStore.Controllers
     {
         private VideoGameStoreDBContext db = new VideoGameStoreDBContext();
 
-        [Authorize(Roles = "Admin, Employee")]
         // GET: Invoices
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult Index()
         {
             var invoices = db.Invoices.Include(i => i.Credit_Card).Include(i => i.User);
             return View(invoices.ToList());
         }
 
+        // This action retrieves the invoices for the current user and provides them for the view.
         [Authorize(Roles = "Customer, Admin, Employee, Member")]
         public ActionResult DisplayUserInvoices()
         {
@@ -30,6 +38,7 @@ namespace VideoGameStore.Controllers
             return View(invoices.ToList());
         }
 
+        // This action retreives a particular invoice for the current user and provides them for the view.
         [Authorize(Roles = "Customer, Admin, Employee, Member")]
         public ActionResult DisplayUserInvoice(int? id)
         {
@@ -58,6 +67,7 @@ namespace VideoGameStore.Controllers
         }
 
         // GET: Invoices/Details/5
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -72,8 +82,8 @@ namespace VideoGameStore.Controllers
             return View(invoice);
         }
 
-        [Authorize(Roles = "Admin, Employee")]
         // GET: Invoices/Create
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult Create()
         {
             ViewBag.credit_card_id = new SelectList(db.Credit_Card, "credit_card_id", "credit_card_id");
@@ -81,10 +91,10 @@ namespace VideoGameStore.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin, Employee")]
         // POST: Invoices/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "invoice_id,user_id,credit_card_id,invoice_date,ship_date,is_invoice_closed")] Invoice invoice)
@@ -101,8 +111,8 @@ namespace VideoGameStore.Controllers
             return View(invoice);
         }
 
-        [Authorize(Roles = "Admin, Employee")]
         // GET: Invoices/Edit/5
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -119,10 +129,10 @@ namespace VideoGameStore.Controllers
             return View(invoice);
         }
 
-        [Authorize(Roles = "Admin, Employee")]
         // POST: Invoices/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "invoice_id,user_id,credit_card_id,invoice_date,ship_date,is_invoice_closed")] Invoice invoice)
@@ -138,8 +148,8 @@ namespace VideoGameStore.Controllers
             return View(invoice);
         }
 
-        [Authorize(Roles = "Admin, Employee")]
         // GET: Invoices/Delete/5
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
@@ -154,8 +164,8 @@ namespace VideoGameStore.Controllers
             return View(invoice);
         }
 
-        [Authorize(Roles = "Admin, Employee")]
         // POST: Invoices/Delete/5
+        [Authorize(Roles = "Admin, Employee")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)

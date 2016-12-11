@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* Filename: Credit_CardController.cs
+ * Description: This class is responsible for handing the interaction between the user and the Credit Card model.
+ * 
+ * Revision History:
+ *     Ryan Pease, 2016-10-23: Created 
+*/
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
@@ -14,14 +21,15 @@ namespace VideoGameStore.Controllers
     {
         private VideoGameStoreDBContext db = new VideoGameStoreDBContext();
 
-        [Authorize(Roles = "Admin, Employee")]
         // GET: Credit_Card
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult Index()
         {
             var credit_Card = db.Credit_Card.Include(c => c.User);
             return View(credit_Card.ToList());
         }
 
+        // This action retrieves the current user's credit cards and provides them for the view.
         [Authorize(Roles = "Admin, Employee, Customer, Member")]
         public ActionResult UserCards()
         {
@@ -30,8 +38,8 @@ namespace VideoGameStore.Controllers
             return View(credit_Card.ToList());
         }
 
-        [Authorize(Roles = "Admin, Employee")]
         // GET: Credit_Card/Details/5
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult Details(int? id)
         {
             if (id == null)
@@ -46,25 +54,18 @@ namespace VideoGameStore.Controllers
             return View(credit_Card);
         }
 
-        [Authorize(Roles = "Admin, Employee")]
         // GET: Credit_Card/Create
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult Create()
         {
             ViewBag.user_id = new SelectList(db.Users, "user_id", "username");
             return View();
         }
-
-        // GET: Credit_Card/CreateUserCreditCard
-        public ActionResult CreateUserCreditCard()
-        {
-            ViewBag.user_id = db.Users.Where(u => u.username == this.User.Identity.Name).FirstOrDefault().user_id;
-            return View();
-        }
-
-        [Authorize(Roles = "Admin, Employee")]
+        
         // POST: Credit_Card/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "credit_card_id,user_id,card_number,expiry_date,is_expired,is_flagged")] Credit_Card credit_Card)
@@ -80,6 +81,15 @@ namespace VideoGameStore.Controllers
             return View(credit_Card);
         }
 
+        // This action displays the view when the current user requests to create a credit card.
+        // GET: Credit_Card/CreateUserCreditCard
+        public ActionResult CreateUserCreditCard()
+        {
+            ViewBag.user_id = db.Users.Where(u => u.username == this.User.Identity.Name).FirstOrDefault().user_id;
+            return View();
+        }
+
+        // This action is responsible for creating a credit card for the current user.
         // POST: Credit_Card/CreateUserCreditCard
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -93,7 +103,6 @@ namespace VideoGameStore.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Checkout", "Cart");
             }
-
             ViewBag.user_id = db.Users.Where(u => u.username == this.User.Identity.Name).FirstOrDefault().user_id;
             return View(credit_Card);
         }

@@ -189,9 +189,8 @@
                 @if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
                 {
                     <p>@Html.ActionLink("Edit", "Edit", new { id = item.user_id })</p>
+                    <p>@Html.ActionLink("Details", "Details", new { id = item.user_id })</p>
                 }
-
-                @Html.ActionLink("Details", "Details", new { id = item.user_id })
 
                 @if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
                 {

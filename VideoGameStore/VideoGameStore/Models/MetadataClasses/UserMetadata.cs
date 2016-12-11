@@ -4,6 +4,7 @@
  * Revision History:
  *     Ryan Pease, 2016-10-28: Created
  *     Ryan Pease, 2016-10-29: Updated
+ *     Ryan Pease, 2016-12-08: Updated
  */
 
 using RPClassLibrary;
@@ -56,7 +57,6 @@ namespace VideoGameStore.Models
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]
         [DateNotInFuture]
         public System.DateTime birthdate { get; set; }
-        [Required]
         [Display(Name = "Date Joined")]        
         [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}", ApplyFormatInEditMode = true)]        
         [DateNotInFuture]
@@ -90,6 +90,10 @@ namespace VideoGameStore.Models
             last_name = RPValidations.Capitalize(last_name, true);
             gender = RPValidations.Capitalize(gender, false);
             phone = RPValidations.FormatPhoneNumber(phone);
+            if (date_joined == DateTime.Parse("0001-01-01"))
+            {
+                date_joined = DateTime.Today;
+            }
             yield return ValidationResult.Success;
         }
     }
