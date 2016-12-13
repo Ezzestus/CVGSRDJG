@@ -12,6 +12,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Net;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using VideoGameStore.Models;
 
@@ -96,31 +97,49 @@ namespace VideoGameStore.Controllers
         }
 
         // GET: Users/Edit/5
-        [Authorize(Roles = "Admin, Employee")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User user = db.Users.Find(id);
-            if (user == null)
+            if (!User.IsInRole("Admin") || !User.IsInRole("Employee"))
             {
-                return HttpNotFound();
+                if(db.Users.Where(u => u.username == User.Identity.Name).FirstOrDefault().user_id == id)
+                {
+                    User currentUser = db.Users.Find(id);
+                    if (currentUser == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    return View(currentUser);
+                }
+                else
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
+                }
             }
-            return View(user);
+            else
+            {
+                User user = db.Users.Find(id);
+                if (user == null)
+                {
+                    return HttpNotFound();
+                }
+                return View(user);
+            }                        
         }
 
         // POST: Users/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Admin, Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "user_id,username,email,user_password,login_failures,first_name,last_name,phone,gender,birthdate,date_joined,is_employee,is_admin,is_member,is_inactive,is_locked_out,is_on_email_list,favorite_platform,favorite_category,notes")] User user)
         {
             if (ModelState.IsValid)
             {
+                user.user_password = Crypto.HashPassword(user.user_password);
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
