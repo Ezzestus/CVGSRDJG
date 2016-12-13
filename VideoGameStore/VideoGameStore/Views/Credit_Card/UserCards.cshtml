@@ -21,14 +21,20 @@
 
 @foreach (var item in Model) {
     <tr>
+        @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+        {
+            <td>
+                @Html.DisplayFor(modelItem => item.card_number)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.expiry_date)
+            </td>
+        }        
         <td>
-            @Html.DisplayFor(modelItem => item.card_number)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.expiry_date)
-        </td>        
-        <td>
-            <p>@Html.ActionLink("Edit", "Edit", new { id = item.credit_card_id })</p>             
+            @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+            {
+                <p>@Html.ActionLink("Edit", "Edit", new { id = item.credit_card_id })</p>
+            }            
             <p>@Html.ActionLink("Delete", "Delete", new { id = item.credit_card_id })</p>
         </td>
     </tr>

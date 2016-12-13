@@ -51,6 +51,7 @@ namespace VideoGameStore.Controllers
             ViewBag.numAddresses = numAddresses;
             ViewBag.user_id = user_id;
             ViewBag.address_id = new SelectList(addresses, "address_id", "Address.street_address");
+            ViewBag.shipping_address_id = new SelectList(addresses, "address_id", "Address.street_address");
             ViewBag.credit_card_id = new SelectList(creditcards, "credit_card_id", "card_number");
 
             return View();
@@ -59,8 +60,8 @@ namespace VideoGameStore.Controllers
         // This action is responsible for converting the cart into an invoice.
         //POST: Checkout
         [HttpPost]
-        [Authorize(Roles = "Customer, Admin, Employee, Member")]
-        public ActionResult Checkout(int address_id, int credit_card_id)
+        [Authorize(Roles = "Customer, Admin, Employee, Member")]  
+        public ActionResult Checkout(int address_id, int shipping_address_id, int credit_card_id)
         {
             int user_id = db.Users.Where(u => u.username == this.User.Identity.Name).FirstOrDefault().user_id;
             Cart cart = GetCart();
@@ -87,6 +88,16 @@ namespace VideoGameStore.Controllers
                 invoiceAddress.invoice_id = invoiceNumber;
                 invoiceAddress.is_billing_address = true;
                 db.Invoice_Address.Add(invoiceAddress);
+
+                if (address_id != shipping_address_id)
+                {
+                    // Create an invoice address based on the user's selected address for shipping address
+                    Invoice_Address shippingAddress = new Invoice_Address();
+                    shippingAddress.address_id = shipping_address_id;
+                    shippingAddress.invoice_id = invoiceNumber;
+                    shippingAddress.is_billing_address = false;
+                    db.Invoice_Address.Add(shippingAddress);
+                }
 
                 // get items in cart
                 foreach (CartLineItem item in cart.Items)

@@ -19,7 +19,9 @@ namespace VideoGameStore.Models
 
         public User user;
 
-        public Address address;
+        public Address billingAddress;
+
+        public Address shippingAddress;
 
         public Credit_Card credit_card;
 

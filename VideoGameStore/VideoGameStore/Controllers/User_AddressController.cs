@@ -96,14 +96,13 @@ namespace VideoGameStore.Controllers
         }
 
         // GET: User_Address/Delete/5
-        [Authorize(Roles = "Admin, Employee")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            User_Address user_Address = db.User_Address.Find(id);
+            User_Address user_Address = db.User_Address.Where(u => u.address_id == id).FirstOrDefault();
             if (user_Address == null)
             {
                 return HttpNotFound();
@@ -112,12 +111,12 @@ namespace VideoGameStore.Controllers
         }
 
         // POST: User_Address/Delete/5
-        [Authorize(Roles = "Admin, Employee")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            User_Address user_Address = db.User_Address.Find(id);
+            int user_id = db.Users.Where(u => u.username == User.Identity.Name).FirstOrDefault().user_id;
+            User_Address user_Address = db.User_Address.Find(user_id, id);
             db.User_Address.Remove(user_Address);
             db.SaveChanges();
             return RedirectToAction("Index");

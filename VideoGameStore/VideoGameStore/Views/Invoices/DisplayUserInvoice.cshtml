@@ -12,7 +12,6 @@
     <dl class="dl-horizontal">
         <dt>
             @Html.DisplayNameFor(model => model.invoice.invoice_date)
-            @*Invoice Date*@
         </dt>
 
         <dd>
@@ -39,6 +38,23 @@
 
         <dd>
             @Html.DisplayFor(model => model.credit_card.card_number)
+        </dd>
+
+        <dt>
+            Billing Address
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.billingAddress.street_address)<br />
+            @Html.DisplayFor(model => model.billingAddress.city) @Html.DisplayFor(model => model.billingAddress.Province.province_code)<br />
+            @Html.DisplayFor(model => model.billingAddress.postal_code)
+        </dd>
+        <dt>
+            Shipping Address
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.shippingAddress.street_address)<br />
+            @Html.DisplayFor(model => model.shippingAddress.city) @Html.DisplayFor(model => model.shippingAddress.Province.province_code)<br />
+            @Html.DisplayFor(model => model.shippingAddress.postal_code)
         </dd>
     </dl>
 </div>

@@ -108,6 +108,7 @@ namespace VideoGameStore.Controllers
         }
 
         // GET: Credit_Card/Edit/5
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult Edit(int? id)
         {
             if (id == null)
@@ -126,6 +127,7 @@ namespace VideoGameStore.Controllers
         // POST: Credit_Card/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "credit_card_id,user_id,card_number,expiry_date,is_expired,is_flagged")] Credit_Card credit_Card)
