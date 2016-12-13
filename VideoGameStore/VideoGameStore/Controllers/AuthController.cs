@@ -39,7 +39,7 @@ namespace VideoGameStore.Controllers
             {
                 string password = model.Password;
                 VideoGameStoreDBContext db = new VideoGameStoreDBContext();
-                var users = db.Users.Where(u => u.email == model.Email).ToList();
+                var users = db.Users.Where(u => u.username == model.Username).ToList();             
                 if (users.Count == 1)
                 {
                     User user = users.FirstOrDefault();
@@ -72,20 +72,20 @@ namespace VideoGameStore.Controllers
                         var context = Request.GetOwinContext();
                         var authManager = context.Authentication;
                         authManager.SignIn(identity);
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "Games");
                     }
                     ModelState.AddModelError("", "Incorrect password.");
                     return View(model);
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Email address not found.");
+                    ModelState.AddModelError("", "Username not found.");
                     return View(model);
                 }
             }
             else
             {
-                ModelState.AddModelError("", "Invalid email or password.");
+                ModelState.AddModelError("", "Invalid username or password.");
                 return View(model);
             }
         }
@@ -116,11 +116,19 @@ namespace VideoGameStore.Controllers
                 string hashedPassword = Crypto.HashPassword(password);
 
                 user.user_password = hashedPassword;
-
+                
                 VideoGameStoreDBContext db = new VideoGameStoreDBContext();
-                db.Users.Add(user);
-                db.SaveChanges();
-                return RedirectToAction("Index", "Home");
+                if (db.Users.Where(u => u.username == user.username).ToList().Count() == 0)
+                {
+                    db.Users.Add(user);
+                    db.SaveChanges();
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    TempData["message"] = "Username already taken, please enter a unique username.";
+                    return View();
+                }                
             }
             else
             {
