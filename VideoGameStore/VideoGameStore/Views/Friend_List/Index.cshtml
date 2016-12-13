@@ -38,9 +38,12 @@
             <td>
                 @Html.DisplayFor(modelItem => item.User1.username)
             </td>
+            @if(item.User.username == this.User.Identity.Name || item.User1.username == this.User.Identity.Name)
+            {
             <td>
                 @Html.ActionLink("Unfriend", "Delete", "Friend_List", new { uid = item.User1.user_id, fid = item.User.user_id }, null)
             </td>
+            }
         </tr>
     }
 </table>
