@@ -57,11 +57,25 @@ namespace VideoGameStore.Controllers
                 else
                 {
                     User user = db.Users.Where(u => u.user_id == user_id).FirstOrDefault();
-                    int address_id = db.Invoice_Address.Where(a => a.invoice_id == invoice.invoice_id).FirstOrDefault().address_id;
-                    Address address = db.Addresses.Where(a => a.address_id == address_id).FirstOrDefault();
+                    var invoiceAddresses = db.Invoice_Address.Where(i => i.invoice_id == id).ToList();                    
+                    Address billingAddress;
+                    Address shippingAddress;
+                    if (invoiceAddresses.Count() > 1)
+                    {                        
+                        billingAddress = invoiceAddresses[0].Address;                        
+                        shippingAddress = invoiceAddresses[1].Address;                        
+                    }
+                    else
+                    {                        
+                        billingAddress = invoiceAddresses[0].Address;
+                        shippingAddress = invoiceAddresses[0].Address;
+                    }
+                                                            
+                    //int address_id = db.Invoice_Address.Where(a => a.invoice_id == invoice.invoice_id).FirstOrDefault().address_id;
+                    //Address address = db.Addresses.Where(a => a.address_id == address_id).FirstOrDefault();
                     Credit_Card credit_card = db.Credit_Card.Where(c => c.credit_card_id == invoice.credit_card_id).FirstOrDefault();
                     IEnumerable<Line_Item> items = db.Line_Item.Where(l => l.invoice_id == id).Include(l => l.Game).ToList();
-                    return View(new UserInvoiceViewModel { invoice = invoice, user = user, address = address, credit_card = credit_card, items = items });
+                    return View(new UserInvoiceViewModel { invoice = invoice, user = user, billingAddress = billingAddress, shippingAddress = shippingAddress, credit_card = credit_card, items = items });
                 }
             }
         }

@@ -50,6 +50,7 @@ namespace VideoGameStore.Controllers
             ViewBag.numAddresses = numAddresses;
             ViewBag.user_id = user_id;
             ViewBag.address_id = new SelectList(addresses, "address_id", "Address.street_address");
+            ViewBag.shipping_address_id = new SelectList(addresses, "address_id", "Address.street_address");
             ViewBag.credit_card_id = new SelectList(creditcards, "credit_card_id", "card_number");
      
             return View();
@@ -59,7 +60,7 @@ namespace VideoGameStore.Controllers
         //POST: Checkout
         [HttpPost]
         [Authorize(Roles = "Customer, Admin, Employee, Member")]  
-        public ActionResult Checkout(int address_id, int credit_card_id)
+        public ActionResult Checkout(int address_id, int shipping_address_id, int credit_card_id)
         {
             int user_id = db.Users.Where(u => u.username == this.User.Identity.Name).FirstOrDefault().user_id;            
             Cart cart = GetCart();
@@ -70,35 +71,46 @@ namespace VideoGameStore.Controllers
             }
             else
             {                                    
-                    Invoice invoice = new Invoice();
-                    invoice.user_id = user_id;
-                    invoice.credit_card_id = credit_card_id;
-                    invoice.invoice_date = DateTime.Now;                    
-                    db.Invoices.Add(invoice);
-                    db.SaveChanges();
+                Invoice invoice = new Invoice();
+                invoice.user_id = user_id;
+                invoice.credit_card_id = credit_card_id;
+                invoice.invoice_date = DateTime.Now;                    
+                db.Invoices.Add(invoice);
+                db.SaveChanges();
 
-                    // Get the  id of most recently inserted invoice
-                    int invoiceNumber = db.Invoices.Max(i => i.invoice_id);
+                // Get the  id of most recently inserted invoice
+                int invoiceNumber = db.Invoices.Max(i => i.invoice_id);
 
-                    // Create an invoice address based on user's selected address for billing address
-                    Invoice_Address invoiceAddress = new Invoice_Address();
-                    invoiceAddress.address_id = address_id;
-                    invoiceAddress.invoice_id = invoiceNumber;
-                    invoiceAddress.is_billing_address = true;
-                    db.Invoice_Address.Add(invoiceAddress);                    
+                // Create an invoice address based on user's selected address for billing address
+                Invoice_Address invoiceAddress = new Invoice_Address();
+                invoiceAddress.address_id = address_id;
+                invoiceAddress.invoice_id = invoiceNumber;
+                invoiceAddress.is_billing_address = true;
+                db.Invoice_Address.Add(invoiceAddress);
+           
+                if (address_id != shipping_address_id)
+                {
+                    // Create an invoice address based on the user's selected address for shipping address
+                    Invoice_Address shippingAddress = new Invoice_Address();
+                    shippingAddress.address_id = shipping_address_id;
+                    shippingAddress.invoice_id = invoiceNumber;
+                    shippingAddress.is_billing_address = false;
+                    db.Invoice_Address.Add(shippingAddress);
+                }                
 
-                    // get items in cart
-                    foreach (CartLineItem item in cart.Items)
-                    {
-                        // Create a line item based on each item and add to database
-                        Line_Item line_item = new Line_Item();
-                        line_item.invoice_id = invoiceNumber;
-                        line_item.game_id = item.Game.game_id;
-                        line_item.quantity = item.Quantity;
-                        line_item.price = item.Game.list_price;
-                        db.Line_Item.Add(line_item);
-                        db.SaveChanges();                        
-                    }
+                // get items in cart
+                foreach (CartLineItem item in cart.Items)
+                {
+                    // Create a line item based on each item and add to database
+                    Line_Item line_item = new Line_Item();
+                    line_item.invoice_id = invoiceNumber;
+                    line_item.game_id = item.Game.game_id;
+                    line_item.quantity = item.Quantity;
+                    line_item.price = item.Game.list_price;
+                    db.Line_Item.Add(line_item);
+                    db.SaveChanges();                        
+                }
+
                 // Clear out cart data
                 Session["Cart"] = new Cart();                
                 return RedirectToAction("DisplayUserInvoice", "Invoices", new { id = invoiceNumber });

@@ -7,7 +7,7 @@
 <h2>@this.User.Identity.Name's Addresses</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "CreateUserAddress", "Addresses", null, null)
 </p>
 <table class="table">
     <tr>                        
@@ -17,9 +17,7 @@
         <th>
             @Html.DisplayNameFor(model => model.address_name)
         </th>
-        @*<th>
-            @Html.DisplayNameFor(model => model.User.username)
-        </th>*@
+ 
         <th></th>
     </tr>
 
@@ -31,13 +29,8 @@
         <td>
             @Html.DisplayFor(modelItem => item.address_name)
         </td>
-        @*<td>
-            @Html.DisplayFor(modelItem => item.User.username)
-        </td>*@
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |       
-            @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |*@
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        <td>           
+            <p>@Html.ActionLink("Delete", "Delete", new { id = item.address_id })</p>
         </td>
     </tr>
 }
