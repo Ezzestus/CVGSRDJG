@@ -152,6 +152,7 @@ namespace VideoGameStore.Controllers
             {
                 ViewBag.isAdmin = false;
             }
+            ViewBag.oldReview = review.review_content;
 
                 return View(review);
         }
@@ -166,15 +167,6 @@ namespace VideoGameStore.Controllers
 
             if (ModelState.IsValid)
             {
-                //check if the user changed their review if they did unaprove it
-                var oldReviewContent = db.Reviews.Find(review.review_id);
-                if(review.review_content != oldReviewContent.review_content)
-                {
-                    if (review.is_approved)
-                    {
-                        review.is_approved = false;
-                    }
-                }
                 db.Entry(review).State = EntityState.Modified;
 
                 db.SaveChanges();
@@ -197,6 +189,19 @@ namespace VideoGameStore.Controllers
                 return HttpNotFound();
             }
             return View(review);
+        }
+        public ActionResult checkReviewChanges(Review review)
+        {
+            //check if the user changed their review if they did unaprove it
+            var oldReviewContent = db.Reviews.Find(review.review_id);
+            if (review.review_content != oldReviewContent.review_content)
+            {
+                if (review.is_approved)
+                {
+                    review.is_approved = false;
+                }
+            }
+            return RedirectToAction("Edit", review);
         }
 
         // POST: Reviews/Delete/5

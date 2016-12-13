@@ -66,20 +66,23 @@
         }
         else
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.review_date)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Game.game_name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.review_content)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.User.username)
-                </td>
-            </tr>
+            if (item.is_approved)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.review_date)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Game.game_name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.review_content)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.User.username)
+                    </td>
+                </tr>
+            }
         }
     }
 
