@@ -276,6 +276,7 @@
     <Compile Include="Models\Sales_Report.cs">
       <DependentUpon>VideoGameStoreModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\StoreEventRegisteredView.cs" />
     <Compile Include="Models\Store_Event.cs">
       <DependentUpon>VideoGameStoreModel.tt</DependentUpon>
     </Compile>

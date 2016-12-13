@@ -9,7 +9,7 @@
  * 5-12-2016, Greg Shalay: Created Code       
 *@
 
-@model IEnumerable<VideoGameStore.Models.Store_Event>
+@model IEnumerable<VideoGameStore.Models.StoreEventRegisteredView>
 @{
     ViewBag.Title = "Index";
 }
@@ -50,14 +50,12 @@
                 </th>
             }
         <th>
-            @Html.DisplayNameFor(model => model.Address.street_address)
+            @Html.DisplayNameFor(model => model.street_address)
         </th>
         <th></th>
     </tr>
 
-@{  string[] user_events = ViewData["user_events"] as string[];
-    int counter = 0;
-    foreach (var item in Model)
+@{  foreach (var item in Model)
     {
         <tr>
             <td>
@@ -89,20 +87,19 @@
                     </td>
             }
             <td>
-                @Html.DisplayFor(modelItem => item.Address.street_address)
+                @Html.DisplayFor(modelItem => item.street_address)
             </td>
             <td>
-                @{  if (user_events[counter] == null)
+                @{  if (item.is_registered == false)
                     {
                         <p><a class="btn btn-success" href="@Url.Action("Register", "Events", new { store_event_id = item.store_event_id })">Register For Event</a></p>
                         <p><a class="btn btn-primary" href="@Url.Action("Details", "Events", new { id = item.store_event_id })">Event Details</a></p>
                     }
-                    else if (user_events[counter] == item.store_event_id.ToString())
+                    else if (item.is_registered == true)
                     {
                         <p><a class="btn btn-danger" href="@Url.Action("UnRegister", "Events", new { store_event_id = item.store_event_id})">Un-Register For Event</a></p>
                         <p><a class="btn btn-primary" href="@Url.Action("Details", "Events", new { id = item.store_event_id })">Event Details</a></p>
                     }
-                    counter++;
                     }
 
 
@@ -111,7 +108,7 @@
                         <p><a class="btn btn-primary" href="@Url.Action("Edit", "Events", new { id = item.store_event_id })">Edit</a></p>
                         <p><a class="btn btn-primary" href="@Url.Action("Delete", "Events", new { id = item.store_event_id })">Delete</a></p>
                     }
-</td>
+            </td>
         </tr>
     }
 }

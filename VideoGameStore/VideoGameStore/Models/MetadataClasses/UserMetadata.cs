@@ -27,9 +27,6 @@ namespace VideoGameStore.Models
         [Display(Name = "Email")]
         [DataType(DataType.EmailAddress)]
     
-        [RegularExpression(@"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
-                @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$", 
-            ErrorMessage = "Invalid email address, please use a valid address (e.g. user@outlook.com).")]
         public string email { get; set; }
         [Required]
         [Display(Name = "Password")]

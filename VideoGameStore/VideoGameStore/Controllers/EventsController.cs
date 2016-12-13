@@ -61,9 +61,56 @@ namespace VideoGameStore.Controllers
         // GET: Events
         public ActionResult Index()
         {
-            var store_Event = db.Store_Event.Include(s => s.Address);
-            checkIfUserIsRegisteredToEvent();
-            return View(store_Event.ToList());
+            int user_id = db.Users.Where(u => u.username == this.User.Identity.Name).FirstOrDefault().user_id;
+
+            //var store_Event = db.Store_Event.Include(s => s.Address);
+            var store_Events = from storeEvents in db.Store_Event
+                               select storeEvents;
+            var store_Events_User = from storeEventsUser in db.Store_Event_User
+                                    where (storeEventsUser.user_id == user_id)
+                                    select storeEventsUser;
+
+            List<Store_Event> storeEvent = store_Events.ToList();
+            List<Store_Event_User> storeEventUser = store_Events_User.ToList();
+            List < StoreEventRegisteredView> storeEventsList = new List<StoreEventRegisteredView>();
+
+            foreach(Store_Event events in storeEvent)
+            {
+                StoreEventRegisteredView userEvent = new StoreEventRegisteredView();
+                Store_Event_User seu = storeEventUser.Where(m => m.store_event_id == events.store_event_id).FirstOrDefault(); //(from eventTemp in store_Events_User
+                //          where (eventTemp.store_event_id == events.store_event_id)
+                //          select eventTemp).FirstOrDefault();
+                
+                
+                userEvent.store_event_id = events.store_event_id;
+                
+                if(seu == null)
+                {
+                    userEvent.store_event_user_id = 0;
+                    userEvent.is_registered = false;
+                    userEvent.user_id = user_id;
+                }
+                else
+                {
+                    userEvent.store_event_user_id = seu.store_event_id;
+                    userEvent.is_registered = true;
+                    userEvent.user_id = seu.user_id;
+                }
+
+                userEvent.store_event_name = events.store_event_name;
+                userEvent.description = events.description;
+                userEvent.street_address = events.Address.street_address;
+                userEvent.address_id = events.address_id;
+                userEvent.start_date = events.start_date;
+                userEvent.end_date = events.end_date;
+                userEvent.max_registrants = events.max_registrants;
+                userEvent.is_full = events.is_full;
+                userEvent.is_members_only = events.is_members_only;
+                userEvent.is_cancelled = events.is_cancelled;
+
+                storeEventsList.Add(userEvent);
+            }
+            return View(storeEventsList);
         }
 
         // GET: Events/Details/5
@@ -259,33 +306,6 @@ namespace VideoGameStore.Controllers
             {
                 SharedDB.command.ExecuteNonQuery();
             }
-        }
-
-        /// <summary>
-        /// Runs a query against the database to check which events a user is registered for (if any). Sends an array of the results to a ViewData object to be later used in the view.
-        /// </summary>
-        public void checkIfUserIsRegisteredToEvent()
-        {
-            string[] events = getEventIDS();
-            string[] user_events = new string[events.Length];
-            int user_id = db.Users.Where(u => u.username == this.User.Identity.Name).FirstOrDefault().user_id;
-
-            SharedDB.setConnectionString();
-            SharedDB.command = new MySqlCommand("SELECT store_event_id FROM Store_Event_User WHERE user_id = " + user_id, SharedDB.connection);
-            SharedDB.connection.Open();
-
-            using (SharedDB.connection)
-            {
-                MySqlDataReader reader = SharedDB.command.ExecuteReader();
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        user_events[reader.GetInt32(0) - 1] = reader.GetString(0);
-                    }
-                }
-            }
-            ViewData["user_events"] = user_events;
         }
     }
 }
