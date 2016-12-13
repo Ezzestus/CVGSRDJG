@@ -31,11 +31,6 @@
             </td>
         }        
         <td>
-            @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
-            {
-                <p>@Html.ActionLink("Edit", "Edit", new { id = item.credit_card_id })</p>
-            }            
-            <p>@Html.ActionLink("Delete", "Delete", new { id = item.credit_card_id })</p>
         </td>
     </tr>
 }

@@ -27,6 +27,7 @@ namespace VideoGameStore.Controllers
         /// </summary>
         /// <param name="id">game id</param>
         /// <returns>list of reviews</returns>
+        [AllowAnonymous]
         public ActionResult Index(int? id)
         {
             if (id != null)

@@ -6,7 +6,7 @@
 <h2>@ViewBag.Title</h2>
 @using (Html.BeginForm("Index", "Games"))
 {
-    <table>
+    <table class="table">
         <tr>
             <td>
                 <p>
@@ -169,9 +169,9 @@
                     @if (this.User.IsInRole("Admin") || this.User.IsInRole("Employee"))
                     {
                         <p>@Html.ActionLink("Edit", "Edit", new { id = item.game_id }) </p>
+                        <p>@Html.ActionLink("Details", "Details", new { id = item.game_id })</p>
                     }
 
-                    <p>@Html.ActionLink("Details", "Details", new { id = item.game_id })</p>
                     <p><a href="@Url.Action("Index", "Reviews", new { id = item.game_id })">Reviews</a></p>
 
                     @if (this.User.IsInRole("Admin"))

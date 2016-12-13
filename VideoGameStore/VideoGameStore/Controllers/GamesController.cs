@@ -46,7 +46,7 @@ namespace VideoGameStore.Controllers
         }
 
         // GET: Games/Details/5
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin, Employee")]
         public ActionResult Details(int? id)
         {
             if (id == null)
