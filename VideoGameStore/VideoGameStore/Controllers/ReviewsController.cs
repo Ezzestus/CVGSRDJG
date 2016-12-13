@@ -2,7 +2,8 @@
  * Description: This class is responsible for handing the interaction between the user and the Review model.
  * 
  * Revision History:
- *     Ryan Pease, 2016-10-23: Created 
+ *     Ryan Pease, 2016-10-23: Created
+ *     David Klunmpenhower Edited 
 */
 
 using System;
@@ -21,10 +22,14 @@ namespace VideoGameStore.Controllers
     {
         private VideoGameStoreDBContext db = new VideoGameStoreDBContext();
 
-        // GET: Reviews
+        /// <summary>
+        /// gets a list of user reviews for a game to display to the user
+        /// </summary>
+        /// <param name="id">game id</param>
+        /// <returns>list of reviews</returns>
         public ActionResult Index(int? id)
         {
-            if (id != null || id != 0)
+            if (id != null)
             {
                 var reviews = db.Reviews.Include(r => r.Game).Include(r => r.User).Where(r => r.game_id == id);
                 return View(reviews.ToList());
@@ -50,12 +55,17 @@ namespace VideoGameStore.Controllers
             return View(review);
         }
 
-        // GET: Reviews/Create
+        /// <summary>
+        /// allows the user to creaete a review of a game they own if they haven't reviewed it yet
+        /// </summary>
+        /// <param name="userGameID">id of entry in the user_game table</param>
+        /// <returns></returns>
         public ActionResult Create(int? userGameID)
         {
             Review review = new Review();
 
-            if (userGameID != 0 || userGameID != null)
+            //verify that the user owns the game
+            if (userGameID != null)
             {
                 User_Game userGame = db.User_Game.Find(userGameID);
                 ViewBag.rating = userGame.rating;
@@ -101,20 +111,29 @@ namespace VideoGameStore.Controllers
             return View(review);
         }
 
-        // GET: Reviews/Edit/5
-        public ActionResult Edit(int? id, int? userGameID, bool? isAdmin)
-        {
+        /// <summary>
+        /// allow the user to modify their review or an admin to aprove it
+        /// </summary>
+        /// <param name="id">review id</param>
+        /// <param name="userGameID">user game id</param>
+        /// <param name="isAdmin">check if admin is trying to aprove reviews</param>
+        /// <returns></returns>
+        public ActionResult Edit(int? id, int? userGameID, bool? isAdmin) { 
+        
+            //check that there is a review
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
+            //find the review
             Review review = db.Reviews.Find(id);
             if (review == null)
             {
                 return HttpNotFound();
             }
 
-
+            //check that the user owns the game
             if (userGameID != null)
             {
                 User_Game userGame = db.User_Game.Find(userGameID);
@@ -123,7 +142,9 @@ namespace VideoGameStore.Controllers
             }
 
             ViewBag.userGameID = userGameID;
-            if(isAdmin != null)
+
+            //check if the admin is trying to approve reviews
+            if (isAdmin != null)
             {
                 ViewBag.isAdmin = isAdmin;
             }
@@ -145,7 +166,17 @@ namespace VideoGameStore.Controllers
 
             if (ModelState.IsValid)
             {
+                //check if the user changed their review if they did unaprove it
+                var oldReviewContent = db.Reviews.Find(review.review_id);
+                if(review.review_content != oldReviewContent.review_content)
+                {
+                    if (review.is_approved)
+                    {
+                        review.is_approved = false;
+                    }
+                }
                 db.Entry(review).State = EntityState.Modified;
+
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }

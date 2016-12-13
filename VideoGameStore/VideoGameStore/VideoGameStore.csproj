@@ -216,6 +216,7 @@
     <Compile Include="Models\Address.cs">
       <DependentUpon>VideoGameStoreModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AverageGameRating.cs" />
     <Compile Include="Models\Cart.cs" />
     <Compile Include="Models\CartIndexViewModel.cs" />
     <Compile Include="Models\Credit_Card.cs">
@@ -244,6 +245,7 @@
     </Compile>
     <Compile Include="Models\LoginModel.cs" />
     <Compile Include="Models\MetadataClasses\AddressMetadata.cs" />
+    <Compile Include="Models\MetadataClasses\AverageGameMetadata.cs" />
     <Compile Include="Models\MetadataClasses\Credit_CardMetadata.cs" />
     <Compile Include="Models\MetadataClasses\DeveloperMetadata.cs" />
     <Compile Include="Models\MetadataClasses\Friend_ListMetadata.cs" />
@@ -459,7 +461,6 @@
     <Content Include="Views\User_Address\Details.cshtml" />
     <Content Include="Views\User_Address\Edit.cshtml" />
     <Content Include="Views\User_Address\Index.cshtml" />
-    <Content Include="Views\User_Game\Create.cshtml" />
     <Content Include="Views\User_Game\Delete.cshtml" />
     <Content Include="Views\User_Game\Details.cshtml" />
     <Content Include="Views\User_Game\Edit.cshtml" />
@@ -477,6 +478,9 @@
     <Content Include="Views\Invoices\DisplayUserInvoice.cshtml" />
     <Content Include="Views\Credit_Card\CreateUserCreditCard.cshtml" />
     <Content Include="Views\Invoices\DisplayUserInvoices.cshtml" />
+    <Content Include="Views\Credit_Card\UserCards.cshtml" />
+    <Content Include="Views\Addresses\CreateUserAddress.cshtml" />
+    <Content Include="Views\Profiles\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

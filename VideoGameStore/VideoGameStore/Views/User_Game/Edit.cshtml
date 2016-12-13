@@ -42,29 +42,36 @@
                             @Html.DropDownList("rating", null, htmlAttributes: new { @class = "form-control" })
                             @Html.ValidationMessageFor(model => model.rating, "", new { @class = "text-danger" })
                         </div>
-                        <div class="col-md-10">
-                            <input type="submit" value="Save" class="btn btn-default" />
-                        </div>
-                        </div>
+                        <p>
+                            <div class="col-md-10">
+                                <input type="submit" value="Save" class="btn btn-primary" />
+                            </div>
+                        </p>
+                    </div>
                 </td>
                 <td>
                     @Html.DisplayFor(model => model.Game.game_name)
                 </td>
                 <td>
-                    @Html.ActionLink("Details", "Details", "Games", new { id = Model.game_id }, null) |
-                    @Html.ActionLink("Back to List", "Index")
-                    @if (ViewBag.reviewID == null || ViewBag.reviewID == 0)
-                        {
+                    <p>
+                        <a class="btn btn-primary" href="@Url.Action("Details", "Games", new { id = Model.game_id }, null)">Details</a>
+                    </p>
+                    @if (ViewBag.reviewID == null)
+                    {
+                        <p>
                             <div class="text-centre">
                                 <a class="btn btn-primary" href="@Url.Action("Create", "Reviews")">Review Game</a>
                             </div>
-                        }
-                        else
-                        {
+                        </p>
+                    }
+                    else
+                    {
+                        <p>
                             <div class="text-centre">
                                 <a class="btn btn-primary" href="@Url.Action("Edit", "Reviews", new { id = ViewBag.reviewID, userGameID = Model.user_game_id })">Review Game</a>
                             </div>
-                        }
+                        </p>
+                    }
                 </td>
             </tr>
 

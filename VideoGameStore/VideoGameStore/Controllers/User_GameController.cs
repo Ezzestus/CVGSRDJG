@@ -22,11 +22,16 @@ namespace VideoGameStore.Controllers
     {
         private VideoGameStoreDBContext db = new VideoGameStoreDBContext();
 
-        // GET: User_Game
-        public ActionResult Index()
+        /// <summary>
+        /// Gets the games that belong to the user or the games that belong and match the search criteria and hands them to the index view
+        /// </summary>
+        /// <param name="search">search criteria</param>
+        /// <returns>list of games owned by the user</returns>
+        public ActionResult Index(string search ="")
         {
+            //declarations
             int userID = db.Users.Where(u => u.username == this.User.Identity.Name).FirstOrDefault().user_id;
-
+            ViewBag.Search = "";
             var gamesQuery = (
                 from userGames in db.User_Game
                 join games in db.Games on userGames.game_id equals games.game_id
@@ -42,8 +47,50 @@ namespace VideoGameStore.Controllers
                     datePurchased = userGames.date_purchased
                 }).ToList();
 
-            
+            //check if user is searching
+            if (search != "")
+            {
+                gamesQuery = (
+                from userGames in db.User_Game
+                join games in db.Games on userGames.game_id equals games.game_id
+                where (userGames.user_id == userID)
+                where (games.game_name.Contains(search))
+                select new
+                {
+                    userGameID = userGames.user_game_id,
+                    gameID = games.game_id,
+                    imageLocation = games.image_location,
+                    description = games.description,
+                    gameName = games.game_name,
+                    rating = userGames.rating,
+                    datePurchased = userGames.date_purchased
+                }).ToList();
+                if(gamesQuery.Count() ==0)
+                {
+                    ViewBag.Search = search;
+                }
+            }
+            else
+            {
+                gamesQuery = (
+                from userGames in db.User_Game
+                join games in db.Games on userGames.game_id equals games.game_id
+                where (userGames.user_id == userID)
+                where( games.game_name.Contains(search))
+                select new
+                {
+                    userGameID = userGames.user_game_id,
+                    gameID = games.game_id,
+                    imageLocation = games.image_location,
+                    description = games.description,
+                    gameName = games.game_name,
+                    rating = userGames.rating,
+                    datePurchased = userGames.date_purchased
+                }).ToList();
+            }
 
+            
+            //left join the users games with the review table
             List<UserGameViewModel> gamesQueryList = new List<UserGameViewModel>();
             foreach (var item in gamesQuery)
             {
@@ -59,6 +106,7 @@ namespace VideoGameStore.Controllers
                     review = r;
                 }
 
+                //add game to the list of games
                 UserGameViewModel game = new UserGameViewModel();
                 game.userGameID = item.userGameID;
                 game.gameID = item.gameID;
@@ -75,34 +123,12 @@ namespace VideoGameStore.Controllers
             return View(gamesQueryList);
         }
 
-        // GET: User_Game/Create
-        public ActionResult Create()
-        {
-            ViewBag.game_id = new SelectList(db.Games, "game_id", "game_name");
-            ViewBag.user_id = new SelectList(db.Users, "user_id", "username");
-            return View();
-        }
-
-        // POST: User_Game/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "user_game_id,user_id,game_id,date_purchased,rating")] User_Game user_Game)
-        {
-            if (ModelState.IsValid)
-            {
-                db.User_Game.Add(user_Game);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.game_id = new SelectList(db.Games, "game_id", "game_name", user_Game.game_id);
-            ViewBag.user_id = new SelectList(db.Users, "user_id", "username", user_Game.user_id);
-            return View(user_Game);
-        }
-
-        // GET: User_Game/Edit/5
+        /// <summary>
+        /// Allows the user to edit the rating of a game
+        /// </summary>
+        /// <param name="id">game id</param>
+        /// <param name="reviewID">id of the users review if the user has reviewed the game</param>
+        /// <returns>rating  view</returns>
         public ActionResult Edit(int? id, int? reviewID)
         {
             if (id == null)
@@ -114,6 +140,8 @@ namespace VideoGameStore.Controllers
             {
                 return HttpNotFound();
             }
+
+            //generate drop down list for rating
             List<int> rating = new List<int>();
             for (int i = 1; i < 6; i++)
             {
@@ -131,6 +159,7 @@ namespace VideoGameStore.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "user_game_id,user_id,game_id,date_purchased,rating")] User_Game user_Game)
         {
+            //save changes
             if (ModelState.IsValid)
             {
                 db.Entry(user_Game).State = EntityState.Modified;

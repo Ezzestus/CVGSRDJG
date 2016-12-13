@@ -2,7 +2,8 @@
  * Description: This class is responsible for handing the interaction between the user and the Game model.
  * 
  * Revision History:
- *     Ryan Pease, 2016-10-23: Created 
+ *     Ryan Pease, 2016-10-23: Created
+ *     David Klumpenhower, 2016-12-10 added search functionality 
 */
 
 using MySql.Data.MySqlClient;
@@ -25,12 +26,23 @@ namespace VideoGameStore.Controllers
 
         // GET: Games
         [AllowAnonymous]
-        public ActionResult Index()
+        public ActionResult Index(string search = "")
         {
-            var games = db.Games.Include(g => g.Developer).Include(g => g.Genre).Include(g => g.Publisher);
-            //insertDefaultRatings();
-            getAverageGameRatings();
-            return View(games.ToList());
+            List<Game> gameList = new List<Game>();
+            if (search == "")
+            {
+                var games = db.Games.Include(g => g.Developer).Include(g => g.Genre).Include(g => g.Publisher);
+                gameList = games.ToList();
+            }
+            else
+            {
+                var games = db.Games.Include(g => g.Developer).Include(g => g.Genre).Include(g => g.Publisher).Where(g => g.game_name.Contains(search));
+                gameList = games.ToList();
+            }
+
+            List<AverageGameRating> gamesWithAverageRatings = new List<AverageGameRating>();
+            gamesWithAverageRatings = getAverageGameRatings(gameList);
+            return View(gamesWithAverageRatings);
         }
 
         // GET: Games/Details/5
@@ -58,7 +70,7 @@ namespace VideoGameStore.Controllers
             ViewBag.publisher_id = new SelectList(db.Publishers, "publisher_id", "publisher_name");
             return View();
         }
-        
+
         // POST: Games/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -134,7 +146,7 @@ namespace VideoGameStore.Controllers
             }
             return View(game);
         }
-        
+
         // POST: Games/Delete/5
         [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
@@ -156,48 +168,6 @@ namespace VideoGameStore.Controllers
             base.Dispose(disposing);
         }
 
-        public string[] getGameIDS()
-        {
-            string[] results;
-            int num_of_games = 0;
-            SharedDB.setConnectionString();
-            SharedDB.connection.Open();
-            using (SharedDB.connection)
-            {
-                SharedDB.command = new MySqlCommand("SELECT COUNT(game_id) FROM Game;", SharedDB.connection);
-                MySqlDataReader reader = SharedDB.command.ExecuteReader();
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        num_of_games = reader.GetInt32(0);
-                    }
-                }
-            }
-
-            results = new string[num_of_games];
-            SharedDB.connection.Open();
-            using (SharedDB.connection)
-            {
-
-                SharedDB.command = new MySqlCommand("SELECT game_id FROM Game;", SharedDB.connection);
-                MySqlDataReader reader = SharedDB.command.ExecuteReader();
-                if (reader.HasRows)
-                {
-                    string[] temp = new string[num_of_games];
-                    int counter = 0;
-                    while (reader.Read())
-                    {
-                        temp[counter] = reader.GetInt32(0).ToString();
-                        counter++;
-                    }
-                    results = temp;
-                    reader.Close();
-                }
-            }
-            return sanitizeArray(results);
-        }
-
         public void insertDefaultRatings()
         {
             SharedDB.setConnectionString();
@@ -210,83 +180,44 @@ namespace VideoGameStore.Controllers
             }
         }
 
-        public string[] sanitizeArray(string[] dirty)
+        public List<AverageGameRating> getAverageGameRatings(List<Game> games)
         {
-            string[] clean;
-            List<string> temp = new List<string>();
-            foreach (string item in dirty)
+            double rating = 0f;
+            List<AverageGameRating> ratingResults = new List<AverageGameRating>();
+
+            foreach (Game game in games)
             {
-                if (item != null)
+                AverageGameRating averageGame = new AverageGameRating();
+                var ratings = db.User_Game.Include(g => g.rating).Where(g => g.game_id == game.game_id);
+                if (ratings.Count() > 0)
                 {
-                    temp.Add(item);
-                }
-            }
-
-            clean = new string[temp.Count];
-
-            for (int i = 0; i < clean.Length; i++)
-            {
-                clean[i] = temp[i];
-            }
-
-            return clean;
-        }
-
-        public void getAverageGameRatings()
-        {
-            string[] ids = getGameIDS();
-            Array.Sort(ids);
-            string[] ratingResults = new string[ids.Count()];
-            double averageRating = 0f;
-            SharedDB.setConnectionString();
-            int counter = 0;
-
-            int idCounter = 0;
-            foreach (string id in ids)
-            {
-
-                if (id == null)
-                {
-                    continue;
+                    rating = Math.Round((double)Double.Parse(ratings.Sum(r => r.rating).ToString()) / Double.Parse(ratings.Count().ToString()),1);
+                    averageGame.averageRating = rating.ToString();
                 }
                 else
                 {
-                    using (SharedDB.connection)
-                    {
-                        SharedDB.connection.Open();                        
-                        SharedDB.command = new MySqlCommand("SELECT rating FROM User_Game WHERE rating IS NOT NULL AND game_id = " + id, SharedDB.connection);
-                        MySqlDataReader reader = SharedDB.command.ExecuteReader();
-                        if (reader.HasRows)
-                        {
-                            int sum_of_ratings = 0;
-                            int num_of_ratings = 0;
-                            double[] ratings = new double[ids.Count()];
-                            counter = 0;
-                            while (reader.Read())
-                            {
-                                if (string.IsNullOrWhiteSpace(reader.GetString(0)))
-                                {
-                                    continue;
-                                }
-                                sum_of_ratings += reader.GetInt32(0);
+                    averageGame.averageRating = "N/A";
 
-                                counter++;
-                            }
 
-                            num_of_ratings = counter;
-                            averageRating = Math.Round((double)sum_of_ratings / (double)num_of_ratings, 1);
-                            ratingResults[idCounter] = averageRating.ToString();
-                            reader.Close();
-                        }
-                        else
-                        {
-                            ratingResults[idCounter] = "N/A";
-                        }
-                    }
                 }
-                idCounter++;
+                averageGame.game_id = game.game_id;
+                averageGame.game_name = game.game_name;
+                averageGame.description = game.description;
+                averageGame.cost = game.cost;
+                averageGame.list_price = game.list_price;
+                averageGame.on_hand = game.on_hand;
+                averageGame.developer_name = game.Developer.developer_name;
+                averageGame.publisher_name = game.Publisher.publisher_name;
+                averageGame.genre = game.Genre.genre_name;
+                averageGame.release_date = game.release_date;
+                averageGame.is_on_sale = game.is_on_sale;
+                averageGame.is_discontinued = game.is_discontinued;
+                averageGame.is_downloadable = game.is_downloadable;
+                averageGame.is_physical_copy = game.is_physical_copy;
+                averageGame.image_location = game.image_location;
+                ratingResults.Add(averageGame);
             }
-            ViewData["AverageRatings"] = sanitizeArray(ratingResults);
+            return ratingResults;
         }
     }
 }

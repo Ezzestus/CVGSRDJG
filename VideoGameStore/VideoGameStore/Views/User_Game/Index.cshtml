@@ -5,11 +5,30 @@
 }
 
 <h2>@User.Identity.Name's Library</h2>
+@using (Html.BeginForm("Index", "User_Game"))
+{
+    <table>
+        <tr>
+            <td>
+                <p>
+                    <input type="text" id="search" name="search" value="" />
+                </p>
+            </td>
+            <td>
+                <p>
+                    <div class="text-centre">
+                        <a type="submit" class="btn btn-primary" href="@Url.Action("Index", "UserGame")">Search</a>
+                    </div>
+                </p>
+            </td>
+        </tr>
+    </table>
+}
 
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.imageLocation)
+
         </th>
         <th>
             @Html.DisplayNameFor(model => model.description)
@@ -25,12 +44,22 @@
         </th>
     </tr>
 
-    @if (Model.Count() == 0)
+    @if (Model.Count() == 0 && ViewBag.Search == "")
     {
         <tr>
             <td>
                 <p>
                     You seem to have no games, check out our selection<a href="@Url.Action("Index", "Games")"> Here</a> and buy some.
+                </p>
+            </td>
+        </tr>
+    }
+    else if (Model.Count() == 0 && ViewBag.Search != "")
+    {
+        <tr>
+            <td>
+                <p>
+                    Nothing in Your Library Matches @ViewBag.Search try our looking <a href="@Url.Action("Index", "Games", new {search = ViewBag.Search})"> here</a> at our store.
                 </p>
             </td>
         </tr>
@@ -56,23 +85,33 @@
                     @Html.DisplayFor(modelItem => item.gameName)
                 </td>
                 <td>
-                    @Html.ActionLink("Details", "Details", "Games", new { id = item.gameID }, null) |
-                    Download(coming soon)
+                    <p>
+                        <a class="btn btn-primary" href="@Url.Action("Details", "Games", new { id = item.gameID }, null)">Details</a>
+                    </p>
+                    <p>
+                        <a class="btn btn-primary" href="">Dowload</a>
+                    </p>
                     @if (item.reviewID == null || item.reviewID == 0)
                     {
-                        <div class="text-centre">
-                            <a class="btn btn-primary" href="@Url.Action("Create", "Reviews", new { userGameID = item.userGameID})">Review Game</a>
-                        </div>
+                        <p>
+                            <div class="text-centre">
+                                <a class="btn btn-primary" href="@Url.Action("Create", "Reviews", new { userGameID = item.userGameID})">Review Game</a>
+                            </div>
+                        </p>
                     }
                     else
                     {
-                        <div class="text-centre">
-                            <a class="btn btn-primary" href="@Url.Action("Edit", "Reviews", new { id = item.reviewID, userGameID = item.userGameID })">Review Game</a>
-                        </div>
+                        <p>
+                            <div class="text-centre">
+                                <a class="btn btn-primary" href="@Url.Action("Edit", "Reviews", new { id = item.reviewID, userGameID = item.userGameID })">Review Game</a>
+                            </div>
+                        </p>
                     }
-                    <div class="text-centre">
-                        <a class="btn btn-primary" href="@Url.Action("Edit", "User_Game", new { id = item.userGameID, reviewID = item.reviewID})">Rate Game</a>
-                    </div>
+                    <p>
+                        <div class="text-centre">
+                            <a class="btn btn-primary" href="@Url.Action("Edit", "User_Game", new { id = item.userGameID, reviewID = item.reviewID})">Rate Game</a>
+                        </div>
+                    </p>
                 </td>
             </tr>
         }
