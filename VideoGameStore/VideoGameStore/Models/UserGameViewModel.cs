@@ -8,7 +8,7 @@ using System.Web;
 
 namespace VideoGameStore.Models
 {
-    public class UserGameViewModel
+    public partial class UserGameViewModel
     {
         public int userGameID { get; set; }
         public int gameID { get; set; }

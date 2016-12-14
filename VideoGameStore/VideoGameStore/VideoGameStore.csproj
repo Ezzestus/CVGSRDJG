@@ -260,6 +260,7 @@
     <Compile Include="Models\MetadataClasses\Sales_ReportMetadata.cs" />
     <Compile Include="Models\MetadataClasses\Store_EventMetadata.cs" />
     <Compile Include="Models\MetadataClasses\Store_Event_UserMetadata.cs" />
+    <Compile Include="Models\MetadataClasses\UserGameViewMetadata.cs" />
     <Compile Include="Models\MetadataClasses\UserMetadata.cs" />
     <Compile Include="Models\MetadataClasses\User_AddressMetadata.cs" />
     <Compile Include="Models\MetadataClasses\User_GameMetadata.cs" />
