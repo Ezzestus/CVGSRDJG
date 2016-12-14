@@ -17,16 +17,12 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("VideoGameStore", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })                             
+                @Html.ActionLink("VideoGameStore", "Index", "Games", new { search = "" }, new { @class = "navbar-brand" })                             
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "User_Game")</li>
                     <li>@Html.ActionLink("Users", "Index", "Users")</li>
-                    @*<li>@Html.ActionLink("Customers", "Customers", "Users")</li>
-                    <li>@Html.ActionLink("Employees", "Employees", "Users")</li>
-                    <li>@Html.ActionLink("Members", "Members", "Users")</li>*@
-                    <li>@Html.ActionLink("Games", "Index", "Games")</li>
+                    <li>@Html.ActionLink("Games", "Index", "Games", new {search = "" },null)</li>
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li>@Html.ActionLink("Events", "Index", "Events")</li>
@@ -39,7 +35,7 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <li>@Html.ActionLink("My Profile", "MyIndex", "Profiles", new { uname = this.User.Identity.Name }, null)</li>
-                        <li>@Html.ActionLink("Library", "Index", "User_Game")</li>
+                        <li>@Html.ActionLink("My Library", "Index", "User_Game", new { search = "" }, null)</li>
                     }
                 </ul>
                 <ul class="nav navbar-nav navbar-right">                    

@@ -6,7 +6,7 @@
 <h2>@ViewBag.Title</h2>
 @using (Html.BeginForm("Index", "Games"))
 {
-    <table class="table">
+    <table>
         <tr>
             <td>
                 <p>
@@ -16,7 +16,7 @@
             <td>
                 <p>
                     <div class="text-centre">
-                        <a class="btn btn-primary" type="submit" href="@Url.Action("Index", "Games")">Search</a>
+                        <input class="btn btn-primary" type="submit" href="@Url.Action("Index", "Games")" value="Search"/>
                     </div>
                 </p>
             </td>
