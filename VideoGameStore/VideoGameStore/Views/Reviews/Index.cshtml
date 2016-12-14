@@ -58,8 +58,12 @@
                     @Html.DisplayFor(modelItem => item.User.username)
                 </td>
                 <td>
-                    @Html.ActionLink("Delete", "Delete", new { id = item.review_id }) |
-                    @Html.ActionLink("Edit", "Edit", new { id = item.review_id, isAdmin = true })
+                    <p>
+                        <a href="@Url.Action("Delete", new { id = item.review_id })" class="btn btn-primary">Delete Review</a>
+                    </p>
+                    <p>
+                        <a href="@Url.Action("Edit", new { id = item.review_id, isAdmin = true })" class="btn btn-primary">Edit Review</a>
+                    </p>
                 </td>
 
             </tr>
