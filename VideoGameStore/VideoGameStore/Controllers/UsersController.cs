@@ -103,11 +103,19 @@ namespace VideoGameStore.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            if (!User.IsInRole("Admin") || !User.IsInRole("Employee"))
+            User currentUser = db.Users.Find(id);
+            if (User.IsInRole("Admin") || User.IsInRole("Employee"))
             {
-                if(db.Users.Where(u => u.username == User.Identity.Name).FirstOrDefault().user_id == id)
+                if (currentUser == null)
                 {
-                    User currentUser = db.Users.Find(id);
+                    return HttpNotFound();
+                }
+                return View(currentUser);
+            }
+            else
+            {
+                if (db.Users.Where(u => u.username == User.Identity.Name).FirstOrDefault().user_id == id)
+                {
                     if (currentUser == null)
                     {
                         return HttpNotFound();
@@ -118,70 +126,62 @@ namespace VideoGameStore.Controllers
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
                 }
+
             }
-            else
-            {
-                User user = db.Users.Find(id);
-                if (user == null)
-                {
-                    return HttpNotFound();
-                }
-                return View(user);
-            }                        
         }
 
-        // POST: Users/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "user_id,username,email,user_password,login_failures,first_name,last_name,phone,gender,birthdate,date_joined,is_employee,is_admin,is_member,is_inactive,is_locked_out,is_on_email_list,favorite_platform,favorite_category,notes")] User user)
+    // POST: Users/Edit/5
+    // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+    // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult Edit([Bind(Include = "user_id,username,email,user_password,login_failures,first_name,last_name,phone,gender,birthdate,date_joined,is_employee,is_admin,is_member,is_inactive,is_locked_out,is_on_email_list,favorite_platform,favorite_category,notes")] User user)
+    {
+        if (ModelState.IsValid)
         {
-            if (ModelState.IsValid)
-            {
-                user.user_password = Crypto.HashPassword(user.user_password);
-                db.Entry(user).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(user);
-        }
-
-        // GET: Users/Delete/5
-        [Authorize(Roles = "Admin")]
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            User user = db.Users.Find(id);
-            if (user == null)
-            {
-                return HttpNotFound();
-            }
-            return View(user);
-        }
-        
-        // POST: Users/Delete/5
-        [Authorize(Roles = "Admin")]
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            User user = db.Users.Find(id);
-            db.Users.Remove(user);
+            user.user_password = Crypto.HashPassword(user.user_password);
+            db.Entry(user).State = EntityState.Modified;
             db.SaveChanges();
             return RedirectToAction("Index");
         }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+        return View(user);
     }
+
+    // GET: Users/Delete/5
+    [Authorize(Roles = "Admin")]
+    public ActionResult Delete(int? id)
+    {
+        if (id == null)
+        {
+            return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        }
+        User user = db.Users.Find(id);
+        if (user == null)
+        {
+            return HttpNotFound();
+        }
+        return View(user);
+    }
+
+    // POST: Users/Delete/5
+    [Authorize(Roles = "Admin")]
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public ActionResult DeleteConfirmed(int id)
+    {
+        User user = db.Users.Find(id);
+        db.Users.Remove(user);
+        db.SaveChanges();
+        return RedirectToAction("Index");
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            db.Dispose();
+        }
+        base.Dispose(disposing);
+    }
+}
 }
