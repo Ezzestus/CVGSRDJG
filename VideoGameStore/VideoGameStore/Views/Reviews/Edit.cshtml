@@ -9,13 +9,13 @@
             <table class="table">
                 <tr>
                     <th>
-                        @Html.DisplayNameFor(model => model.Game.game_name)
+                        @Html.DisplayFor(model => model.Game.game_name)
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.Game.description)
                     </th>
                     <th>
-                        @Html.DisplayNameFor(model => model.Game.game_name)
+
                     </th>
                     <th>
                         @Html.DisplayNameFor(model => model.is_approved)
@@ -33,9 +33,6 @@
                     </td>
                     <td>
                         @ViewBag.datePurchased
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => model.Game.game_name)
                     </td>
                     <td>
                         @Html.CheckBoxFor(model => model.is_approved)
