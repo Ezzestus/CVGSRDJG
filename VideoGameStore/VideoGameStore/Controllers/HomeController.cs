@@ -10,7 +10,7 @@ namespace VideoGameStore.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index","Games");
         }
 
         public ActionResult About()
