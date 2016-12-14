@@ -467,7 +467,6 @@
     <Content Include="Views\User_Game\Details.cshtml" />
     <Content Include="Views\User_Game\Edit.cshtml" />
     <Content Include="Views\User_Game\Index.cshtml" />
-    <Content Include="Views\Wish_List\Create.cshtml" />
     <Content Include="Views\Wish_List\Delete.cshtml" />
     <Content Include="Views\Wish_List\Index.cshtml" />
     <Content Include="Views\Profiles\Index.cshtml" />

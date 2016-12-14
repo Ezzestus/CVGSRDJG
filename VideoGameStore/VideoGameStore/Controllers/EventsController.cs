@@ -77,10 +77,7 @@ namespace VideoGameStore.Controllers
             foreach(Store_Event events in storeEvent)
             {
                 StoreEventRegisteredView userEvent = new StoreEventRegisteredView();
-                Store_Event_User seu = storeEventUser.Where(m => m.store_event_id == events.store_event_id).FirstOrDefault(); //(from eventTemp in store_Events_User
-                //          where (eventTemp.store_event_id == events.store_event_id)
-                //          select eventTemp).FirstOrDefault();
-                
+                Store_Event_User seu = storeEventUser.Where(m => m.store_event_id == events.store_event_id).FirstOrDefault(); //(from eventTemp in store_Events_User                
                 
                 userEvent.store_event_id = events.store_event_id;
                 

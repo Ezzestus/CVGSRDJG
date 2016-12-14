@@ -71,8 +71,6 @@ namespace VideoGameStore.Controllers
                         shippingAddress = invoiceAddresses[0].Address;
                     }
                                                             
-                    //int address_id = db.Invoice_Address.Where(a => a.invoice_id == invoice.invoice_id).FirstOrDefault().address_id;
-                    //Address address = db.Addresses.Where(a => a.address_id == address_id).FirstOrDefault();
                     Credit_Card credit_card = db.Credit_Card.Where(c => c.credit_card_id == invoice.credit_card_id).FirstOrDefault();
                     IEnumerable<Line_Item> items = db.Line_Item.Where(l => l.invoice_id == id).Include(l => l.Game).ToList();
                     return View(new UserInvoiceViewModel { invoice = invoice, user = user, billingAddress = billingAddress, shippingAddress = shippingAddress, credit_card = credit_card, items = items });
