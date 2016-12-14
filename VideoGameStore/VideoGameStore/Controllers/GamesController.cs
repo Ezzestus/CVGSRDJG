@@ -180,25 +180,114 @@ namespace VideoGameStore.Controllers
             }
         }
 
+        public ActionResult removeWish(int? gameID)
+        {
+            int userID = 0;
+            if (this.User.Identity.Name != null)
+            {
+                userID = db.Users.Where(u => u.username == this.User.Identity.Name).FirstOrDefault().user_id;
+            }
+            if (gameID != null && userID != 0)
+            {
+                int id = int.Parse(gameID.ToString());
+                Wish_List wish = db.Wish_List.Where(w => w.game_id == id && w.user_id == userID).FirstOrDefault();
+                db.Wish_List.Remove(wish);
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
+        public ActionResult addWish(int? gameID)
+        {
+            int userID = 0;
+            if (this.User.Identity.Name != null)
+            {
+                userID = db.Users.Where(u => u.username == this.User.Identity.Name).FirstOrDefault().user_id;
+            }
+            if (gameID != null && userID != 0)
+            {
+                int id = int.Parse(gameID.ToString());
+                Wish_List wish = new Wish_List();
+                wish.Game = db.Games.Find(id);
+                wish.User = db.Users.Find(userID);
+                wish.game_id = id;
+                wish.user_id = userID;
+                wish.date_added = DateTime.Today;
+                db.Wish_List.Add(wish);
+                db.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
+
+        /// <summary>
+        /// gets the all the data nessicary for display the index of games with averaging their ratings
+        /// </summary>
+        /// <param name="games"></param>
+        /// <returns></returns>
         public List<AverageGameRating> getAverageGameRatings(List<Game> games)
         {
             double rating = 0f;
-            List<AverageGameRating> ratingResults = new List<AverageGameRating>();
+            int userID = 0;
+            if (this.User.Identity.Name != "")
+            {
+                userID = db.Users.Where(u => u.username == this.User.Identity.Name).FirstOrDefault().user_id;
+            }
 
+            List<AverageGameRating> ratingResults = new List<AverageGameRating>();
+            List<Wish_List> wishes = new List<Wish_List>();
+            if (userID != 0)
+            {
+                var wish = from wishList in db.Wish_List
+                           where (wishList.user_id == userID)
+                           select wishList;
+                foreach (Wish_List item in wish)
+                {
+                    wishes.Add(item);
+                }
+            }
             foreach (Game game in games)
             {
                 AverageGameRating averageGame = new AverageGameRating();
                 var ratings = db.User_Game.Include(g => g.rating).Where(g => g.game_id == game.game_id);
                 if (ratings.Count() > 0)
                 {
-                    rating = Math.Round((double)Double.Parse(ratings.Sum(r => r.rating).ToString()) / Double.Parse(ratings.Count().ToString()),1);
+                    rating = Math.Round((double)Double.Parse(ratings.Sum(r => r.rating).ToString()) / Double.Parse(ratings.Count().ToString()), 1);
                     averageGame.averageRating = rating.ToString();
                 }
                 else
                 {
                     averageGame.averageRating = "N/A";
-
-
+                }
+                if(userID == 0)
+                {
+                    averageGame.isLoggedIn = false;
+                }
+                else
+                {
+                    averageGame.isLoggedIn = true;
+                }
+                if (wishes != null)
+                {
+                    Wish_List checkIfWish = wishes.Where(w => w.game_id == game.game_id).FirstOrDefault();
+                    if (checkIfWish != null)
+                    {
+                        averageGame.isWish = true;
+                    }
+                    else
+                    {
+                        averageGame.isWish = false;
+                    }
+                }
+                else
+                {
+                    averageGame.isWish = false;
+                }
+                if(db.User_Game.Where(g => g.game_id == game.game_id && g.user_id == userID).FirstOrDefault() != null)
+                {
+                    averageGame.isOwned = true;
+                }
+                else
+                {
+                    averageGame.isOwned = false;
                 }
                 averageGame.game_id = game.game_id;
                 averageGame.game_name = game.game_name;

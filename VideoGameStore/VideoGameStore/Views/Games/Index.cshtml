@@ -180,14 +180,35 @@
                     }
                 </td>
                 <td>
-                    @using (Html.BeginForm("AddToCart", "Cart"))
+                    @if (item.isOwned == false || User.Identity.Name == "")
                     {
-                        <div class="pull-right">
+                    using (Html.BeginForm("AddToCart", "Cart"))
+                    {
+                        <div>
                             @Html.Hidden("game_id", item.game_id)
                             @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
-                            <input type="submit" class="btn btn-primary" value="Add to Cart" />
+                            <p>
+                            <input type="submit" class="btn btn-primary" value="Add to Cart"  />
+                                </p>
                         </div>
                     }
+                    }
+                    @if (item.isLoggedIn && item.isOwned == false)
+                    {
+                        if (item.isWish)
+                        {
+                            <p>
+                                <a href="@Url.Action("removeWish", new { gameID = item.game_id})" class="btn btn-primary">Remove From Wish List</a>
+                            </p>
+                        }
+                        else
+                        {
+                            <p>
+                                <a href="@Url.Action("addWish", new { gameID = item.game_id})" class="btn btn-primary">Add to Wish List</a>
+                            </p>
+                        }
+                    }
+                    
                 </td>
             </tr>
         }

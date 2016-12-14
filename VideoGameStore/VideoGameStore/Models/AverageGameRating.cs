@@ -26,5 +26,9 @@ namespace VideoGameStore.Models
         public bool is_physical_copy { get; set; }
         public string image_location { get; set; }
         public string averageRating { get; set; }
+        //fields for wish list stuff
+        public bool isWish { get; set; }
+        public bool isLoggedIn { get; set; }
+        public bool isOwned { get; set; }
     }
 }

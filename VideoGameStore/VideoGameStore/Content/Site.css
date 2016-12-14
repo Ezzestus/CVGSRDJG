@@ -26,3 +26,6 @@ textarea {
     min-width: 60vw;
     min-height:300px;
 }
+.btn-primary{
+    float:left;
+}

@@ -80,7 +80,7 @@ namespace VideoGameStore.Controllers
         // POST: Addresses/CreateUserAddress
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Customer, Admin, Employee")]
+        [Authorize(Roles ="Member, Customer, Admin, Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateUserAddress([Bind(Include = "address_id,street_address,city,province_id,postal_code")] Address address)
