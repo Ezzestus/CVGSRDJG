@@ -124,12 +124,15 @@ namespace VideoGameStore.Controllers
                     db.Line_Item.Add(line_item);
 
                     //add game to users library
-                    User_Game game = new User_Game();
-                    game.user_id = user_id;
-                    game.game_id = item.Game.game_id;
-                    game.date_purchased = DateTime.Today;
-                    game.rating = 0;
-                    db.User_Game.Add(game);
+                    if (db.User_Game.Where(g => g.game_id == item.Game.game_id && g.user_id == user_id).FirstOrDefault() == null)
+                    {
+                        User_Game game = new User_Game();
+                        game.user_id = user_id;
+                        game.game_id = item.Game.game_id;
+                        game.date_purchased = DateTime.Today;
+                        game.rating = 0;
+                        db.User_Game.Add(game);
+                    }
 
                     //check if was on wish list and remove if was
                     Wish_List wish = db.Wish_List.Where(w => w.game_id == item.Game.game_id && w.user_id == user_id).FirstOrDefault();

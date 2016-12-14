@@ -180,9 +180,7 @@
                     }
                 </td>
                 <td>
-                    @if (item.isOwned == false || User.Identity.Name == "")
-                    {
-                    using (Html.BeginForm("AddToCart", "Cart"))
+                    @using (Html.BeginForm("AddToCart", "Cart"))
                     {
                         <div>
                             @Html.Hidden("game_id", item.game_id)
@@ -192,7 +190,7 @@
                                 </p>
                         </div>
                     }
-                    }
+
                     @if (item.isLoggedIn && item.isOwned == false)
                     {
                         if (item.isWish)
