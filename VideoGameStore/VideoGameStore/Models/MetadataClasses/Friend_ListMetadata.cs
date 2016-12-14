@@ -29,6 +29,13 @@ namespace VideoGameStore.Models
     [MetadataType(typeof(Friend_ListMetadata))]
     public partial class Friend_List
     {
-
+        public IEnumerable<ValidationResult> Validate(ValidationContext validateContext)
+        {
+            if (date_added == DateTime.Parse("0001-01-01"))
+            {
+                date_added = DateTime.Today;
+            }
+            yield return ValidationResult.Success;
+        }
     }
 }
